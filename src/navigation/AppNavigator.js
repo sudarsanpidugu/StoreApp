@@ -11,6 +11,7 @@ import OrdersScreen from "../screens/Orders/OrdersScreen";
 import TabNavigator from "./TabNavigator";
 import HomeScreen from "../screens/HomeScreen";
 import ServiceDetailScreen from "../screens/ServiceDetailScreen";
+import OtpLoginScreen from "../screens/OtpLoginScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,7 @@ const AppNavigator = () => {
 
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="ServiceDetails" component={ServiceDetailScreen} />
+        <Stack.Screen name="OtpLogin" component={OtpLoginScreen} />
 
 
         {/* Main Tab Navigation */}

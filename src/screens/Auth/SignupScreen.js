@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -35,16 +36,20 @@ const SignupScreen = () => {
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
-        {/* Card */}
         <View style={styles.card}>
+
+          {/* TOP IMAGE */}
+          <Image
+            source={require("../../../assets/Image/backgrounds/car.png")}
+            style={styles.headerImage}
+          />
+
           <Text style={styles.title}>Create Account</Text>
           <Text style={styles.subtitle}>Fill your information below</Text>
 
           <TextInput style={styles.input} placeholder="Full Name" placeholderTextColor={colors.textSecondary} />
-          {/* <TextInput style={styles.input} placeholder="Mobile" keyboardType="numeric" placeholderTextColor={colors.textSecondary} /> */}
           <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" placeholderTextColor={colors.textSecondary} />
 
-          {/* Password */}
           <View style={styles.inputRow}>
             <TextInput
               style={styles.inputField}
@@ -61,7 +66,6 @@ const SignupScreen = () => {
             </TouchableOpacity>
           </View>
 
-          {/* Signup Button */}
           <TouchableOpacity style={styles.button} onPress={handleSignup}>
             <Text style={styles.buttonText}>Signup</Text>
           </TouchableOpacity>
@@ -113,9 +117,15 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: colors.background,
   },
-
   card: {
     padding: 20,
+  },
+
+  headerImage: {
+    width: 230,
+    height: 130,
+    alignSelf: "center",
+    objectFit: "contain",
   },
 
   title: {
@@ -124,7 +134,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: colors.primary,
   },
-
   subtitle: {
     fontSize: 16,
     textAlign: "center",
@@ -153,7 +162,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.textLight,
   },
-
   inputField: {
     flex: 1,
     fontSize: 16,
@@ -167,7 +175,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 30,
   },
-
   buttonText: {
     color: colors.textLight,
     textAlign: "center",
@@ -181,7 +188,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.textDark,
   },
-
   loginLink: {
     color: colors.primary,
     fontWeight: "bold",
@@ -193,7 +199,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
   },
-
   modalBox: {
     width: "85%",
     backgroundColor: colors.textLight,
@@ -203,25 +208,21 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.primary,
   },
-
   closeButton: {
     position: "absolute",
     right: 10,
     top: 10,
   },
-
   modalTitle: {
     fontSize: 24,
     fontWeight: "bold",
     color: colors.textDark,
   },
-
   modalSubtitle: {
     fontSize: 14,
     color: colors.textSecondary,
     marginBottom: 20,
   },
-
   otpInput: {
     borderWidth: 1,
     borderColor: colors.textSecondary,
@@ -233,7 +234,6 @@ const styles = StyleSheet.create({
     color: colors.textDark,
     marginBottom: 22,
   },
-
   verifyBtn: {
     backgroundColor: colors.primary,
     paddingVertical: 12,
@@ -241,7 +241,6 @@ const styles = StyleSheet.create({
     width: "80%",
     alignItems: "center",
   },
-
   verifyText: {
     color: colors.textLight,
     fontSize: 18,

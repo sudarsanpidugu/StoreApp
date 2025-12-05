@@ -8,11 +8,12 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  Image
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import colors from "../../constants/colors";   // << use global colors
+import colors from "../../constants/colors";
 
 const LoginScreen = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -26,6 +27,13 @@ const LoginScreen = () => {
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
 
         <View style={styles.card}>
+
+          {/* Top Image */}
+          <Image
+            source={require("../../../assets/Image/backgrounds/car.png")}
+            style={styles.headerImage}
+          />
+
           <Text style={styles.title}>Welcome Back 👋</Text>
           <Text style={styles.subtitle}>Login to your account</Text>
 
@@ -59,7 +67,7 @@ const LoginScreen = () => {
             <Text style={styles.forgotText}>Forgot Password?</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity  onPress={() => navigation.replace("Main")}>
+          <TouchableOpacity onPress={() => navigation.navigate("OtpLogin")}>
             <LinearGradient
               colors={[colors.primary, colors.primary]}
               style={styles.button}
@@ -92,6 +100,12 @@ const styles = StyleSheet.create({
   card: {
     padding: 20,
   },
+  headerImage: {
+    width: 230,
+    height: 130,
+    alignSelf: "center",
+    objectFit:"contain",
+  },
   title: {
     fontSize: 32,
     fontWeight: "bold",
@@ -102,7 +116,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     color: colors.textSecondary,
-    marginBottom: 25,
+    marginBottom: 10,
   },
   inputContainer: {
     flexDirection: "row",
@@ -135,7 +149,6 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     marginTop: 30,
     elevation: 4,
-    background:colors.primary,
   },
   buttonText: {
     color: colors.textLight,
