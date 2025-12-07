@@ -1,15 +1,11 @@
-import React, { useEffect } from "react";
-import * as SplashScreen from "expo-splash-screen";
-import AppNavigator from "./src/navigation/AppNavigator";
+import React from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import AppNavigator from "./src/navigation/AppNavigator"; // your file
 
 export default function App() {
-  useEffect(() => {
-    const prepare = async () => {
-      await SplashScreen.preventAutoHideAsync();
-      await SplashScreen.hideAsync();  // hide instantly
-    };
-    prepare();
-  }, []);
-
-  return <AppNavigator />;
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AppNavigator />
+    </GestureHandlerRootView>
+  );
 }

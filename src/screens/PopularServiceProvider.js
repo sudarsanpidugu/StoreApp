@@ -1,6 +1,14 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
+import { FontAwesome, Entypo } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import colors from "../constants/colors";
 
 const providers = [
@@ -8,7 +16,7 @@ const providers = [
     id: "1",
     name: "Crystal Clear Car Wash",
     desc: "We offer a variety of washes.",
-    price: "$10",
+    distance: "1.5 km",
     rating: 4.5,
     image: require("../../assets/Image/provider/p1.jpg"),
   },
@@ -16,7 +24,7 @@ const providers = [
     id: "2",
     name: "AquaShine Car Wash",
     desc: "We offer a variety of washes.",
-    price: "$10",
+    distance: "2.3 km",
     rating: 4.7,
     image: require("../../assets/Image/provider/p2.jpg"),
   },
@@ -24,16 +32,21 @@ const providers = [
     id: "3",
     name: "Prestige Auto Spa",
     desc: "We offer a variety of washes.",
-    price: "$10",
+    distance: "3.0 km",
     rating: 4.8,
     image: require("../../assets/Image/provider/p3.jpg"),
   },
 ];
 
-
 const PopularServiceProviders = () => {
+  const navigation = useNavigation();
+
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity
+      style={styles.card}
+      activeOpacity={0.8}
+      onPress={() => navigation.navigate("ServiceDetails", { provider: item })} // navigate here
+    >
       <Image source={item.image} style={styles.image} />
 
       <View style={styles.midContent}>
@@ -52,11 +65,10 @@ const PopularServiceProviders = () => {
         </View>
       </View>
 
-      <View style={styles.priceWrapper}>
-        <Text style={styles.starting}>Starting</Text>
-        <View style={styles.priceTag}>
-          <Text style={styles.price}>{item.price}</Text>
-        </View>
+      {/* Distance + Location Icon */}
+      <View style={styles.locationWrapper}>
+        <Entypo name="location-pin" size={20} color={colors.primary} />
+        <Text style={styles.distanceText}>{item.distance}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -97,7 +109,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     elevation: 4,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 6,
   },
@@ -123,22 +134,16 @@ const styles = StyleSheet.create({
   ratingRow: {
     flexDirection: "row",
   },
-  priceWrapper: {
-    alignItems: "flex-end",
+
+  /* LOCATION SECTION */
+  locationWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  starting: {
-    fontSize: 12,
-    color: "#555",
-    marginBottom: 4,
-  },
-  priceTag: {
-    backgroundColor: "#DFFFE4",
-    paddingVertical: 3,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-  },
-  price: {
-    color: "green",
+  distanceText: {
+    fontSize: 13,
     fontWeight: "700",
+    color: colors.primary,
+    marginLeft: 2,
   },
 });

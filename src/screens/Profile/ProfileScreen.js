@@ -11,9 +11,11 @@ import {
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../../constants/colors";
+import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen = () => {
   const [imageModal, setImageModal] = useState(false);
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -51,19 +53,20 @@ const ProfileScreen = () => {
 
       {/* Scroll Items */}
       <ScrollView style={styles.body}>
-        <TouchableOpacity style={styles.option}>
+        <TouchableOpacity style={styles.option} onPress={() => navigation.navigate("Editprofile")}>
           <FontAwesome5 name="user-edit" size={18} color={colors.primary} />
           <Text style={styles.optionText}>Edit Profile</Text>
           <Ionicons name="chevron-forward-outline" size={20} color={colors.gray} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.option}>
+
+        {/* <TouchableOpacity style={styles.option}>
           <Ionicons name="lock-closed-outline" size={18} color={colors.primary} />
           <Text style={styles.optionText}>Change Password</Text>
           <Ionicons name="chevron-forward-outline" size={20} color={colors.gray} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity style={styles.option}>
+        <TouchableOpacity style={styles.option} onPress={() => navigation.navigate("BookingHistory")}>
           <Ionicons name="receipt-outline" size={18} color={colors.primary} />
           <Text style={styles.optionText}>Booking History</Text>
           <Ionicons name="chevron-forward-outline" size={20} color={colors.gray} />
@@ -124,7 +127,7 @@ const styles = StyleSheet.create({
     padding: 40,
   },
 
-  avatarWrapper: { position: "relative" },
+  avatarWrapper: { position: "relative", marginTop: 15 },
 
   avatar: {
     width: 100,

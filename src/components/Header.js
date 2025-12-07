@@ -12,8 +12,11 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../constants/colors";
+import { useNavigation } from "@react-navigation/native";
 
 const Header = () => {
+    const navigation = useNavigation();
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <StatusBar backgroundColor="transparent" translucent barStyle="light-content" />
@@ -30,7 +33,8 @@ const Header = () => {
                         <Text style={styles.locationText}>Hyderabad</Text>
                     </View>
 
-                    <TouchableOpacity>
+                    {/* 🔔 Bell Navigation */}
+                    <TouchableOpacity onPress={() => navigation.navigate("Notification")}>
                         <Ionicons name="notifications-outline" size={26} color={colors.textLight} />
                     </TouchableOpacity>
                 </View>
@@ -49,6 +53,7 @@ const Header = () => {
 };
 
 export default Header;
+
 
 const styles = StyleSheet.create({
     safeArea: {
