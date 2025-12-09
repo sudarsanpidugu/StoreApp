@@ -5,6 +5,7 @@ import colors from "../constants/colors";
 import BannerSlider from "./BannerSlider";
 import ServicesScreen from "./ServicesScreen";
 import PopularServiceProviders from "./PopularServiceProvider";
+import FeatureScreen from "./FeatureScreen";
 
 const HomeScreen = () => {
   return (
@@ -18,6 +19,7 @@ const HomeScreen = () => {
         ListHeaderComponent={
           <>
             <BannerSlider />
+            <FeatureScreen />
             <ServicesScreen />
           </>
         }

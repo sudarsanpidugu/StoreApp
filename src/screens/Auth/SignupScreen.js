@@ -48,23 +48,9 @@ const SignupScreen = () => {
           <Text style={styles.subtitle}>Fill your information below</Text>
 
           <TextInput style={styles.input} placeholder="Full Name" placeholderTextColor={colors.textSecondary} />
-          <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" placeholderTextColor={colors.textSecondary} />
+          <TextInput style={styles.input} placeholder="Mobile Number" keyboardType="email-address" placeholderTextColor={colors.textSecondary} />
 
-          <View style={styles.inputRow}>
-            <TextInput
-              style={styles.inputField}
-              placeholder="Password"
-              placeholderTextColor={colors.textSecondary}
-              secureTextEntry={!passwordVisible}
-            />
-            <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
-              <Ionicons
-                name={passwordVisible ? "eye-off-outline" : "eye-outline"}
-                size={22}
-                color={colors.primary}
-              />
-            </TouchableOpacity>
-          </View>
+          
 
           <TouchableOpacity style={styles.button} onPress={handleSignup}>
             <Text style={styles.buttonText}>Signup</Text>

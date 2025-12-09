@@ -17,14 +17,15 @@ import BooknowScreen from "../screens/Orders/BooknowScreen";
 import BookingHistory from "../screens/Orders/BookingHistory";
 import Editprofile from "../screens/Profile/Editprofile";
 
-import MoreScreen from "../screens/Profile/ProfileScreen"; // Add More Page
-import SettingsScreen from "../screens/more/SettingsScreen";
-import TermsScreen from "../screens/more/TermsScreen";
-import PrivacyScreen from "../screens/more/PrivacyScreen";
-import RateUsScreen from "../screens/more/RateUsScreen";
-import FaqsScreen from "../screens/more/FaqsScreen";
-import ContactUsScreen from "../screens/more/ContactUsScreen";
+import MoreScreen from "../screens/Profile/ProfileScreen";
+import SettingsScreen from "../screens/More/SettingsScreen";
+import TermsScreen from "../screens/More/TermsScreen";
+import PrivacyScreen from "../screens/More/PrivacyScreen";
+import RateUsScreen from "../screens/More/RateUsScreen";
+import FaqsScreen from "../screens/More/FaqsScreen";
+import ContactUsScreen from "../screens/More/ContactUsScreen";
 import CommonHeader from "../screens/More/CommonHeader";
+import AddVehical from "../screens/Profile/AddVehical";
 
 // Additional pages for More Menu
 
@@ -51,6 +52,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Booknow" component={BooknowScreen} />
         <Stack.Screen name="BookingHistory" component={BookingHistory} />
         <Stack.Screen name="Notification" component={NotificationScreen} />
+        <Stack.Screen name="AddVehical" component={AddVehical} />
 
         {/* Profile */}
         <Stack.Screen

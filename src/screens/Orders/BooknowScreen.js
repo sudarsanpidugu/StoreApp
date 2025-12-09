@@ -16,9 +16,12 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../../constants/colors";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 
 const BooknowScreen = () => {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
 
   const [serviceType, setServiceType] = useState("Self");
   const [showPicker, setShowPicker] = useState(false);
@@ -114,7 +117,7 @@ const BooknowScreen = () => {
         </KeyboardAvoidingView>
 
         {/* FOOTER BUTTON */}
-        <View style={styles.footer}>
+        <View style={[styles.footer, { paddingBottom: insets.bottom + 0 }]}>
           <TouchableOpacity style={styles.bookBtn} onPress={() => navigation.navigate("BookingHistory")}>
             <Text style={styles.bookText}>Book Now</Text>
           </TouchableOpacity>
@@ -139,13 +142,13 @@ const styles = StyleSheet.create({
 
   headerArea: {
     paddingHorizontal: 18,
-    paddingVertical:14,
+    paddingVertical: 14,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
 
- headerTitle: {
+  headerTitle: {
     color: "#fff",
     fontSize: 22,
     fontWeight: "900",
@@ -194,19 +197,23 @@ const styles = StyleSheet.create({
 
   footer: {
     position: "absolute",
-    bottom: 0,
+    bottom: 5,     // <-- 5px gap above nav bar
     width: "100%",
     padding: 16,
     backgroundColor: "#fff",
     elevation: 20,
   },
 
+
+
   bookBtn: {
     backgroundColor: colors.primary,
     paddingVertical: 16,
     borderRadius: 14,
     alignItems: "center",
+    marginBottom: 5,   // optional extra gap for look
   },
+
 
   bookText: { fontSize: 18, fontWeight: "800", color: "#fff" },
 });

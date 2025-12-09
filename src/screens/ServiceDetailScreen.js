@@ -12,6 +12,8 @@ import {
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../constants/colors";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 
 const reviews = [
   { id: 1, name: "John Doe", review: "Excellent service! My car looks brand new.", rating: 5 },
@@ -23,6 +25,7 @@ const reviews = [
 
 const ServiceDetailScreen = () => {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -98,14 +101,27 @@ const ServiceDetailScreen = () => {
       </ScrollView>
 
       {/* BOOK BUTTON */}
-      <View style={styles.footer}>
+      <View style={[styles.footer, { paddingBottom: insets.bottom + 5 }]}>
+
+        <TouchableOpacity style={styles.footerIconBtn} onPress={() => console.log("Call Pressed")}>
+          <Ionicons name="call-outline" size={24} color={colors.primary} />
+          <Text style={styles.footerIconText}>Call</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.footerIconBtn} onPress={() => console.log("Chat Pressed")}>
+          <Ionicons name="chatbubble-ellipses-outline" size={24} color={colors.primary} />
+          <Text style={styles.footerIconText}>Chat</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.bookBtn}
           onPress={() => navigation.navigate("Booknow")}
         >
-          <Text style={styles.bookText}>Book Service Now</Text>
+          <Text style={styles.bookText}>Book Now</Text>
         </TouchableOpacity>
+
       </View>
+
     </SafeAreaView>
   );
 };
@@ -161,7 +177,50 @@ const styles = StyleSheet.create({
 
   reviewComment: { marginTop: 5, fontSize: 13, color: "#666", lineHeight: 18 },
 
-  footer: { padding: 15, backgroundColor: "#fff", elevation: 10, position: "absolute", bottom: 0, width: "100%" },
-  bookBtn: { backgroundColor: colors.primary, paddingVertical: 14, borderRadius: 12, alignItems: "center" },
-  bookText: { fontSize: 18, fontWeight: "700", color: "#fff" },
+  footer: {
+    position: "absolute",
+    bottom: 5,
+    width: "100%",
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    backgroundColor: "#fff",
+    elevation: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 10,
+  },
+
+  footerIconBtn: {
+    backgroundColor: "#F2F4F7",
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    borderRadius: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    flex: 1,
+    justifyContent: "center",
+  },
+
+  footerIconText: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: colors.primary,
+  },
+
+  bookBtn: {
+    backgroundColor: colors.primary,
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: "center",
+    flex: 2,     // book button larger
+  },
+
+  bookText: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: "#fff",
+  },
+
 });

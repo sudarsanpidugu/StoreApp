@@ -65,6 +65,13 @@ const ProfileScreen = () => {
           <Text style={styles.optionText}>Change Password</Text>
           <Ionicons name="chevron-forward-outline" size={20} color={colors.gray} />
         </TouchableOpacity> */}
+        <TouchableOpacity style={styles.option} onPress={() => navigation.navigate("AddVehical")}>
+          <Ionicons name="car-outline" size={20} color={colors.primary} />
+          <Text style={styles.optionText}>Add Vehicle</Text>
+          <Ionicons name="chevron-forward-outline" size={20} color={colors.gray} />
+        </TouchableOpacity>
+
+
 
         <TouchableOpacity style={styles.option} onPress={() => navigation.navigate("BookingHistory")}>
           <Ionicons name="receipt-outline" size={18} color={colors.primary} />
@@ -74,10 +81,10 @@ const ProfileScreen = () => {
       </ScrollView>
 
       {/* Logout bottom fixed */}
-      <View style={styles.logoutContainer}>
+      <View style={styles.logoutContainer} onPress={() => navigation.navigate("BookingHistory")}>
         <TouchableOpacity style={styles.logoutBtn}>
           <Ionicons name="log-out-outline" size={20} color="#ff4d4d" />
-          <Text style={styles.logoutText}>Logout</Text>
+          <Text style={styles.logoutText}>Logout </Text>
         </TouchableOpacity>
       </View>
 

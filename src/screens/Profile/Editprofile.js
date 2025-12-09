@@ -14,9 +14,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../../constants/colors";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 
 const Editprofile = () => {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
 
   // Sample user values
   const [name, setName] = useState("Sudarsan");
@@ -91,7 +94,7 @@ const Editprofile = () => {
         </ScrollView>
 
         {/* SAVE BUTTON */}
-        <View style={styles.footer}>
+        <View style={[styles.footer, { paddingBottom: insets.bottom + 0 }]}>
           <TouchableOpacity style={styles.saveBtn}>
             <Text style={styles.saveText}>Save Changes</Text>
           </TouchableOpacity>
@@ -157,18 +160,21 @@ const styles = StyleSheet.create({
 
   footer: {
     position: "absolute",
-    bottom: 0,
+    bottom: 5,     // <-- 5px gap above nav bar
     width: "100%",
     padding: 16,
     backgroundColor: "#fff",
-    elevation: 15,
+    elevation: 20,
   },
+
+
 
   saveBtn: {
     backgroundColor: colors.primary,
     paddingVertical: 16,
     borderRadius: 14,
     alignItems: "center",
+    marginBottom: 5,   // optional extra gap for look
   },
 
   saveText: { fontSize: 18, fontWeight: "800", color: "#fff" },

@@ -11,7 +11,7 @@ import {
   Animated,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Ionicons, FontAwesome,Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../constants/colors";
 
@@ -19,7 +19,7 @@ const providers = [
   {
     id: "1",
     name: "Crystal Clear Car Wash",
-    price: "$10",
+    distance: "1km",
     rating: 4.5,
     image: require("../../assets/Image/provider/p1.jpg"),
     lat: 17.421,
@@ -28,7 +28,7 @@ const providers = [
   {
     id: "2",
     name: "AquaShine Car Wash",
-    price: "$10",
+    distance: "1km",
     rating: 4.2,
     image: require("../../assets/Image/provider/p2.jpg"),
     lat: 17.423,
@@ -37,7 +37,7 @@ const providers = [
   {
     id: "3",
     name: "Prestige Auto Spa",
-    price: "$10",
+    distance: "1km",
     rating: 4.8,
     image: require("../../assets/Image/provider/p3.jpg"),
     lat: 17.425,
@@ -115,9 +115,10 @@ const ExploreScreen = () => {
                 <Text style={styles.ratingText}> {item.rating}</Text>
               </View>
 
-              <View style={styles.priceTag}>
-                <Text style={styles.priceText}>{item.price}</Text>
-              </View>
+              <View style={styles.locationRow}>
+                    <Entypo name="location-pin" size={18} color={colors.primary} />
+                    <Text style={styles.locationText}>{item.distance}</Text>
+                  </View>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -130,6 +131,8 @@ export default ExploreScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
+  locationRow: { flexDirection: "row", alignItems: "center" },
+    locationText: { marginLeft: 4, fontWeight: "700", color: colors.primary },
 
   mapContainer: {
     flex: 1,
@@ -139,7 +142,7 @@ const styles = StyleSheet.create({
   },
 
   map: {
-    flex: 1,
+    flex: 1, 
   },
 
   searchWrapper: {

@@ -41,12 +41,12 @@ const LoginScreen = () => {
             <Ionicons name="mail-outline" size={22} color={colors.primary} style={styles.icon} />
             <TextInput
               style={styles.input}
-              placeholder="Email"
+              placeholder="Mobile Number"
               placeholderTextColor={colors.textSecondary}
             />
           </View>
 
-          <View style={styles.inputContainer}>
+         {/* <View style={styles.inputContainer}>
             <Ionicons name="lock-closed-outline" size={22} color={colors.primary} style={styles.icon} />
             <TextInput
               style={styles.input}
@@ -61,11 +61,11 @@ const LoginScreen = () => {
                 color={colors.primary}
               />
             </TouchableOpacity>
-          </View>
+          </View>*/}
 
-          <TouchableOpacity style={styles.forgotContainer}>
+         {/* <TouchableOpacity style={styles.forgotContainer}>
             <Text style={styles.forgotText}>Forgot Password?</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>*/}
 
           <TouchableOpacity onPress={() => navigation.navigate("OtpLogin")}>
             <LinearGradient
