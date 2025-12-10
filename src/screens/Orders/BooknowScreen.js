@@ -118,7 +118,7 @@ const BooknowScreen = () => {
 
         {/* FOOTER BUTTON */}
         <View style={[styles.footer, { paddingBottom: insets.bottom + 0 }]}>
-          <TouchableOpacity style={styles.bookBtn} onPress={() => navigation.navigate("BookingHistory")}>
+          <TouchableOpacity style={styles.bookBtn} onPress={() => navigation.navigate("BookingOffer")}>
             <Text style={styles.bookText}>Book Now</Text>
           </TouchableOpacity>
         </View>

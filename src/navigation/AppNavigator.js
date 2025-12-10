@@ -26,6 +26,7 @@ import FaqsScreen from "../screens/More/FaqsScreen";
 import ContactUsScreen from "../screens/More/ContactUsScreen";
 import CommonHeader from "../screens/More/CommonHeader";
 import AddVehical from "../screens/Profile/AddVehical";
+import BookingOffer from "../screens/Orders/BookingOffer";
 
 // Additional pages for More Menu
 
@@ -53,6 +54,7 @@ const AppNavigator = () => {
         <Stack.Screen name="BookingHistory" component={BookingHistory} />
         <Stack.Screen name="Notification" component={NotificationScreen} />
         <Stack.Screen name="AddVehical" component={AddVehical} />
+        <Stack.Screen name="BookingOffer" component={BookingOffer} />
 
         {/* Profile */}
         <Stack.Screen
