@@ -21,8 +21,9 @@ const SignupScreen = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [otp, setOtp] = useState("");
 
-  const handleSignup = () => { 
-     navigation.navigate("Main"); }
+  const handleSignup = () => {
+    navigation.navigate("Main");
+  }
   const handleVerifyOtp = () => {
     setShowOtpModal(false);
     navigation.navigate("Main");
@@ -48,17 +49,44 @@ const SignupScreen = () => {
           <Text style={styles.title}>Additional Details</Text>
           <Text style={styles.subtitle}>Fill your information below</Text>
 
-          <TextInput style={styles.input} placeholder="Full Name" placeholderTextColor={colors.textSecondary} />
-           <TextInput style={styles.input} placeholder="Vehicle Number"  placeholderTextColor={colors.textSecondary} />
-           <TextInput style={styles.input} placeholder="Email"  placeholderTextColor={colors.textSecondary} />
-  
-          
+          {/* FULL NAME */}
+          <View style={styles.inputRow}>
+            <Ionicons name="person-outline" size={22} color={colors.primary} style={styles.icon} />
+            <TextInput
+              style={styles.inputField}
+              placeholder="Full Name"
+              placeholderTextColor={colors.textSecondary}
+            />
+          </View>
+
+          {/* VEHICLE NUMBER */}
+          <View style={styles.inputRow}>
+            <Ionicons name="car-outline" size={22} color={colors.primary} style={styles.icon} />
+            <TextInput
+              style={styles.inputField}
+              placeholder="Vehicle Number"
+              placeholderTextColor={colors.textSecondary}
+            />
+          </View>
+
+          {/* EMAIL */}
+          <View style={styles.inputRow}>
+            <Ionicons name="mail-outline" size={22} color={colors.primary} style={styles.icon} />
+            <TextInput
+              style={styles.inputField}
+              placeholder="Email"
+              placeholderTextColor={colors.textSecondary}
+            />
+          </View>
+
+
+
 
           <TouchableOpacity style={styles.button} onPress={handleSignup}>
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
 
-        {/*  <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          {/*  <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <Text style={styles.loginText}>
               Already have an account? <Text style={styles.loginLink}>Login</Text>
             </Text>
@@ -138,6 +166,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: colors.textLight,
     color: colors.textDark,
+  },
+
+  icon: {
+    marginRight: 10,
   },
 
   inputRow: {

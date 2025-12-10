@@ -28,7 +28,7 @@ const ServiceDetailScreen = () => {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 80 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 140 }}>
 
         {/* Banner */}
         <View>
@@ -74,19 +74,41 @@ const ServiceDetailScreen = () => {
           <Image source={require("../../assets/Image/gallery/g3.jpg")} style={styles.galleryImg} />
         </ScrollView>
 
-         <Text style={styles.sectionTitle}>Services</Text>
-        <Text style={styles.aboutText}>
-         Car wash
-        </Text>
-         <Text style={styles.aboutText}>
-         Fittings and slab
-        </Text>
+        {/* ---------- SERVICES SECTION ---------- */}
+        <Text style={styles.sectionTitle}>Services</Text>
 
-           <Text style={styles.sectionTitle}>Privileges</Text>
-        <Text style={styles.aboutText}>
-         Pickup  , Ac lounge
-        </Text>
-        
+        <View style={styles.wrapContainer}>
+
+          <View style={styles.wrapItem}>
+            <Ionicons name="water-outline" size={20} color={colors.primary} />
+            <Text style={styles.wrapText}>Car Wash</Text>
+          </View>
+
+          <View style={styles.wrapItem}>
+            <Ionicons name="construct-outline" size={20} color={colors.primary} />
+            <Text style={styles.wrapText}>Fittings & Slab</Text>
+          </View>
+
+        </View>
+
+        {/* ---------- PRIVILEGES SECTION ---------- */}
+        <Text style={styles.sectionTitle}>Privileges</Text>
+
+        <View style={styles.wrapContainer}>
+
+          <View style={styles.wrapItem}>
+            <Ionicons name="car-outline" size={20} color={colors.primary} />
+            <Text style={styles.wrapText}>Pickup</Text>
+          </View>
+
+          <View style={styles.wrapItem}>
+            <Ionicons name="snow-outline" size={20} color={colors.primary} />
+            <Text style={styles.wrapText}>AC Lounge</Text>
+          </View>
+
+        </View>
+
+
 
         {/* Reviews */}
         <Text style={styles.sectionTitle}>Customer Reviews</Text>
@@ -162,6 +184,36 @@ const styles = StyleSheet.create({
 
   sectionTitle: { marginTop: 18, fontSize: 18, fontWeight: "700", color: "#000", paddingHorizontal: 15 },
   aboutText: { fontSize: 14, color: "#555", marginTop: 6, lineHeight: 20, paddingHorizontal: 15 },
+
+  wrapContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",       // 👈 auto wrap to next line
+    paddingHorizontal: 15,
+    marginTop: 10,
+  },
+
+  wrapItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F8F9FA",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    marginRight: 10,
+    marginBottom: 10,
+    elevation: 1,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 1 },
+  },
+
+  wrapText: {
+    marginLeft: 6,
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#333",
+  },
+
 
   galleryImg: { width: 120, height: 90, borderRadius: 10, marginRight: 10, marginLeft: 15 },
 

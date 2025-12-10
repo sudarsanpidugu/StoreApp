@@ -38,7 +38,7 @@ const LoginScreen = () => {
           <Text style={styles.subtitle}>Login to your account</Text>
 
           <View style={styles.inputContainer}>
-            <Ionicons name="mail-outline" size={22} color={colors.primary} style={styles.icon} />
+            <Ionicons name="call" size={22} color={colors.primary} style={styles.icon} />
             <TextInput
               style={styles.input}
               placeholder="Mobile Number"

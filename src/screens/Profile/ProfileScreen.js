@@ -81,8 +81,8 @@ const ProfileScreen = () => {
       </ScrollView>
 
       {/* Logout bottom fixed */}
-      <View style={styles.logoutContainer} onPress={() => navigation.navigate("Login")}>
-        <TouchableOpacity style={styles.logoutBtn}>
+      <View style={styles.logoutContainer} >
+        <TouchableOpacity style={styles.logoutBtn} onPress={() => navigation.navigate("Login")}>
           <Ionicons name="log-out-outline" size={20} color="#ff4d4d" />
           <Text style={styles.logoutText}>Logout </Text>
         </TouchableOpacity>
