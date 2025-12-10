@@ -72,15 +72,15 @@ const LoginScreen = () => {
               colors={[colors.primary, colors.primary]}
               style={styles.button}
             >
-              <Text style={styles.buttonText}>Login</Text>
+              <Text style={styles.buttonText}>Login /Register</Text>
             </LinearGradient>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+        {/*  <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
             <Text style={styles.loginText}>
               Don’t have an account? <Text style={styles.register}>Register</Text>
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity>*/}
         </View>
 
       </ScrollView>

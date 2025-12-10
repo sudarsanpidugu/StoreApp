@@ -157,7 +157,7 @@ const ServiceListScreen = () => {
               <TouchableOpacity
                 key={item.id}
                 style={styles.card}
-                onPress={() => navigation.navigate("Booknow", { provider: item })}
+                onPress={() => navigation.navigate("ServiceDetails", { provider: item })}
               >
                 <Image source={item.image} style={styles.cardImage} />
 

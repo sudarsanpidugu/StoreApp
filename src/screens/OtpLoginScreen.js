@@ -16,7 +16,7 @@ import colors from "../constants/colors";
 
 const OtpLoginScreen = ({ navigation }) => {
   const [mobile, setMobile] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
+  const [otpSent, setOtpSent] = useState(true);
   const [otp, setOtp] = useState(["", "", "", ""]);
 
   const [timer, setTimer] = useState(30);
@@ -63,7 +63,7 @@ const handleVerify = () => {
   }
 
   console.log("Verified OTP:", enteredOtp);
-  navigation.navigate("Main"); 
+  navigation.navigate("Signup"); 
 };
 
 

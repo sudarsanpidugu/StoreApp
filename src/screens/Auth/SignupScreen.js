@@ -21,10 +21,11 @@ const SignupScreen = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [otp, setOtp] = useState("");
 
-  const handleSignup = () => setShowOtpModal(true);
+  const handleSignup = () => { 
+     navigation.navigate("Main"); }
   const handleVerifyOtp = () => {
     setShowOtpModal(false);
-    navigation.navigate("Login");
+    navigation.navigate("Main");
   };
 
   return (
@@ -44,23 +45,24 @@ const SignupScreen = () => {
             style={styles.headerImage}
           />
 
-          <Text style={styles.title}>Create Account</Text>
+          <Text style={styles.title}>Additional Details</Text>
           <Text style={styles.subtitle}>Fill your information below</Text>
 
           <TextInput style={styles.input} placeholder="Full Name" placeholderTextColor={colors.textSecondary} />
-          <TextInput style={styles.input} placeholder="Mobile Number" keyboardType="email-address" placeholderTextColor={colors.textSecondary} />
-
+           <TextInput style={styles.input} placeholder="Vehicle Number"  placeholderTextColor={colors.textSecondary} />
+           <TextInput style={styles.input} placeholder="Email"  placeholderTextColor={colors.textSecondary} />
+  
           
 
           <TouchableOpacity style={styles.button} onPress={handleSignup}>
-            <Text style={styles.buttonText}>Signup</Text>
+            <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+        {/*  <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <Text style={styles.loginText}>
               Already have an account? <Text style={styles.loginLink}>Login</Text>
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity>*/}
         </View>
       </ScrollView>
 

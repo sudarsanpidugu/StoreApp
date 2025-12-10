@@ -17,10 +17,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const reviews = [
   { id: 1, name: "John Doe", review: "Excellent service! My car looks brand new.", rating: 5 },
-  { id: 2, name: "Jane Smith", review: "Great job! Will definitely return.", rating: 4 },
-  { id: 3, name: "Michael Brown", review: "Best car wash in town!", rating: 5 },
-  { id: 4, name: "Emily Davis", review: "Very good, but a bit slow service.", rating: 4 },
-  { id: 5, name: "Chris Wilson", review: "Highly recommend this place!", rating: 5 },
+
 ];
 
 const ServiceDetailScreen = () => {
@@ -76,6 +73,20 @@ const ServiceDetailScreen = () => {
           <Image source={require("../../assets/Image/gallery/g2.jpg")} style={styles.galleryImg} />
           <Image source={require("../../assets/Image/gallery/g3.jpg")} style={styles.galleryImg} />
         </ScrollView>
+
+         <Text style={styles.sectionTitle}>Services</Text>
+        <Text style={styles.aboutText}>
+         Car wash
+        </Text>
+         <Text style={styles.aboutText}>
+         Fittings and slab
+        </Text>
+
+           <Text style={styles.sectionTitle}>Privileges</Text>
+        <Text style={styles.aboutText}>
+         Pickup  , Ac lounge
+        </Text>
+        
 
         {/* Reviews */}
         <Text style={styles.sectionTitle}>Customer Reviews</Text>
