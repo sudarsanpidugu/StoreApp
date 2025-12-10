@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "700",
     color: "#222",
-    marginBottom: 10,
+    marginBottom: 11,
   },
 
   // Compact card size
