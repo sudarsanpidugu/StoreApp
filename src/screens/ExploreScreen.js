@@ -16,7 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import { LocationContext } from "../screens/LocationContext";
 import colors from "../constants/colors";
 
-/* 🎨 LIGHT / WHITE MAP STYLE (NO BLUE) */
+
 const lightMapStyle = [
   { elementType: "geometry", stylers: [{ color: "#f5f5f5" }] },
   { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
@@ -35,7 +35,7 @@ const lightMapStyle = [
   {
     featureType: "water",
     elementType: "geometry",
-    stylers: [{ color: "#ffffff" }], // 🔥 NO BLUE WATER
+    stylers: [{ color: "#ffffff" }],
   },
 ];
 
@@ -50,7 +50,7 @@ const ExploreScreen = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  /* 📍 GET EXACT CURRENT LOCATION */
+
   const getCurrentLocation = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") return;
@@ -76,7 +76,7 @@ const ExploreScreen = () => {
     getCurrentLocation();
   }, []);
 
-  /* 🔄 LAT/LNG → ADDRESS */
+
   const reverseGeocode = async (lat, lng) => {
     const res = await Location.reverseGeocodeAsync({ latitude: lat, longitude: lng });
     if (res.length > 0) {
@@ -106,10 +106,8 @@ const ExploreScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* ✅ STATUS BAR */}
       <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
 
-      {/* 🔍 SEARCH BAR */}
       <View style={styles.searchBar}>
         <Ionicons name="search" size={18} color="#6B7280" />
         <TextInput
@@ -120,7 +118,6 @@ const ExploreScreen = () => {
         />
       </View>
 
-      {/* 🔽 SEARCH SUGGESTIONS */}
       {suggestions.length > 0 && (
         <View style={styles.suggestionBox}>
           <FlatList
@@ -151,7 +148,6 @@ const ExploreScreen = () => {
         </View>
       )}
 
-      {/* 🗺 MAP */}
       <MapView
         ref={mapRef}
         style={{ flex: 1 }}
@@ -163,17 +159,14 @@ const ExploreScreen = () => {
         }}
       />
 
-      {/* 🎯 CURRENT LOCATION BUTTON */}
       <TouchableOpacity style={styles.gpsBtn} onPress={getCurrentLocation}>
         <Ionicons name="locate" size={22} color="#fff" />
       </TouchableOpacity>
 
-      {/* 📍 CENTER PIN */}
       <View style={styles.centerPin}>
         <Ionicons name="location-sharp" size={44} color={colors.primary} />
       </View>
 
-      {/* 📦 BOTTOM CONFIRM SHEET */}
       <View style={styles.bottomSheet}>
         <Text style={styles.sheetLabel}>Delivering to</Text>
         <Text style={styles.sheetAddress} numberOfLines={2}>
