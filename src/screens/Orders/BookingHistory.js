@@ -9,14 +9,20 @@ import {
   StatusBar,
   Platform,
   Modal,
-  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
-import colors from "../../constants/colors";
 import { useNavigation } from "@react-navigation/native";
+import colors from "../../constants/colors";
+
+/* ---------------- STATUS COLORS ---------------- */
+const STATUS_COLORS = {
+  Accept: colors.primary,
+  Completed: "#2E7D32",
+  Cancel: "#FF3B30",
+};
 
 /* ---------------- BOOKINGS DATA ---------------- */
 const INITIAL_BOOKINGS = [
@@ -38,7 +44,7 @@ const INITIAL_BOOKINGS = [
     date: "2025-01-20",
     displayDate: "20 Jan 2025",
     time: "10:00 AM",
-    status: "Accept", // ✅ ACCEPT
+    status: "Accept",
     distance: "3.4 km",
     image: require("../../../assets/Image/provider/p3.jpg"),
   },
@@ -58,18 +64,25 @@ const INITIAL_BOOKINGS = [
 const BookingHistory = () => {
   const navigation = useNavigation();
 
-  const [bookingList, setBookingList] = useState(INITIAL_BOOKINGS);
-  const [filterVisible, setFilterVisible] = useState(false);
-  const [calendarVisible, setCalendarVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [bookings, setBookings] = useState(INITIAL_BOOKINGS);
   const [activeTab, setActiveTab] = useState("Accept");
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [filterSheetVisible, setFilterSheetVisible] = useState(false);
+  const [calendarVisible, setCalendarVisible] = useState(false);
 
   /* ---------------- FILTER BOOKINGS ---------------- */
-  const filteredBookings = bookingList.filter((b) => {
+  const filteredBookings = bookings.filter((b) => {
     const statusMatch = b.status === activeTab;
     const dateMatch = selectedDate ? b.date === selectedDate : true;
     return statusMatch && dateMatch;
   });
+
+  /* ---------------- DELETE ALL ---------------- */
+  const deleteAllBookings = () => {
+    setBookings([]);
+    setSelectedDate(null);
+    setFilterSheetVisible(false);
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
@@ -90,42 +103,48 @@ const BookingHistory = () => {
 
           <Text style={styles.headerTitle}>Booking History</Text>
 
-          <TouchableOpacity onPress={() => setFilterVisible(true)}>
+          <TouchableOpacity onPress={() => setFilterSheetVisible(true)}>
             <Ionicons name="filter-outline" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
 
-        {/* ---------------- TABS ---------------- */}
+        {/* STATUS TABS */}
         <View style={styles.tabsContainer}>
-          {["Accept", "Completed", "Cancel"].map((tab) => (
-            <TouchableOpacity
-              key={tab}
-              style={[
-                styles.tab,
-                activeTab === tab && styles.activeTab,
-              ]}
-              onPress={() => setActiveTab(tab)}
-            >
-              <Text
-                style={[
-                  styles.tabText,
-                  activeTab === tab && styles.activeTabText,
-                ]}
-              >
-                {tab}
-              </Text>
+          {["Accept", "Completed", "Cancel"].map((tab) => {
+            const isActive = activeTab === tab;
+            const tabColor = STATUS_COLORS[tab];
 
-              {activeTab === tab && (
-                <View style={styles.activeIndicator} />
-              )}
-            </TouchableOpacity>
-          ))}
+            return (
+              <TouchableOpacity
+                key={tab}
+                style={[
+                  styles.tab,
+                  isActive && { backgroundColor: tabColor },
+                ]}
+                onPress={() => setActiveTab(tab)}
+                activeOpacity={0.85}
+              >
+                <Text
+                  style={[
+                    styles.tabText,
+                    isActive && styles.activeTabText,
+                  ]}
+                >
+                  {tab}
+                </Text>
+
+                {/* UNDERLINE INDICATOR */}
+                {isActive && <View style={styles.tabIndicator} />}
+              </TouchableOpacity>
+            );
+          })}
         </View>
+
 
         {/* ---------------- CONTENT ---------------- */}
         {filteredBookings.length === 0 ? (
-          <View style={styles.emptyContainer}>
-            <Ionicons name="calendar-outline" size={52} color={colors.gray} />
+          <View style={styles.centerEmptyContainer}>
+            <Ionicons name="calendar-outline" size={60} color={colors.gray} />
             <Text style={styles.emptyText}>No bookings found</Text>
           </View>
         ) : (
@@ -134,34 +153,29 @@ const BookingHistory = () => {
               <View key={item.id} style={styles.card}>
                 <Image source={item.image} style={styles.cardImg} />
 
-                <View style={{ flex: 1, marginLeft: 12 }}>
+                <View style={styles.cardContent}>
                   <Text style={styles.title}>{item.name}</Text>
                   <Text style={styles.service}>{item.service}</Text>
 
                   <View style={styles.row}>
-                    <Ionicons name="calendar-outline" size={16} color="#666" />
+                    <Ionicons name="calendar-outline" size={14} color="#666" />
                     <Text style={styles.infoText}>
-                      {item.displayDate} | {item.time}
+                      {item.displayDate} • {item.time}
                     </Text>
                   </View>
 
                   <View style={styles.row}>
-                    <Entypo name="location-pin" size={18} color={colors.primary} />
-                    <Text style={[styles.infoText, styles.distance]}>
+                    <Entypo name="location-pin" size={16} color={STATUS_COLORS[item.status]} />
+                    <Text style={[styles.distance, { color: STATUS_COLORS[item.status] }]}>
                       {item.distance}
                     </Text>
                   </View>
                 </View>
 
-                {/* STATUS */}
                 <View
                   style={[
                     styles.statusBox,
-                    item.status === "Completed"
-                      ? styles.completed
-                      : item.status === "Accept"
-                      ? styles.accept
-                      : styles.cancel,
+                    { backgroundColor: STATUS_COLORS[item.status] },
                   ]}
                 >
                   <Text style={styles.statusText}>{item.status}</Text>
@@ -171,6 +185,72 @@ const BookingHistory = () => {
           </ScrollView>
         )}
       </SafeAreaView>
+
+      {/* ---------------- FILTER ACTION SHEET ---------------- */}
+      <Modal transparent animationType="slide" visible={filterSheetVisible}>
+        <View style={styles.sheetOverlay}>
+          <View style={styles.sheet}>
+            <TouchableOpacity style={styles.sheetItem} onPress={deleteAllBookings}>
+              <Text style={[styles.sheetText, { color: "#FF3B30" }]}>
+                Delete All
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.sheetItem}
+              onPress={() => {
+                setFilterSheetVisible(false);
+                setCalendarVisible(true);
+              }}
+            >
+              <Text style={styles.sheetText}>Filter by Date</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.sheetItem, styles.cancelItem]}
+              onPress={() => setFilterSheetVisible(false)}
+            >
+              <Text style={styles.cancelText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* ---------------- DATE FILTER MODAL ---------------- */}
+      <Modal transparent animationType="slide" visible={calendarVisible}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>Select Date</Text>
+
+            <Calendar
+              onDayPress={(day) => {
+                setSelectedDate(day.dateString);
+                setCalendarVisible(false);
+              }}
+              markedDates={
+                selectedDate
+                  ? {
+                    [selectedDate]: {
+                      selected: true,
+                      selectedColor: colors.primary,
+                    },
+                  }
+                  : {}
+              }
+            />
+
+            <TouchableOpacity
+              style={styles.clearBtn}
+              onPress={() => {
+                setSelectedDate(null);
+                setCalendarVisible(false);
+              }}
+            >
+              <Text style={styles.clearText}>Clear Filter</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -203,16 +283,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
-  /* TABS */
   tabsContainer: {
     flexDirection: "row",
     marginHorizontal: 16,
     marginTop: 12,
-    backgroundColor: colors.background,
-    borderRadius: 16,
+    backgroundColor: "#fff",
+    borderRadius: 18,
     padding: 4,
-    borderWidth: 1,
-    borderColor: colors.gray,
+    elevation: 3,
   },
 
   tab: {
@@ -220,10 +298,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 14,
     alignItems: "center",
-  },
-
-  activeTab: {
-    backgroundColor: colors.primary,
+    justifyContent: "center",
   },
 
   tabText: {
@@ -233,22 +308,23 @@ const styles = StyleSheet.create({
   },
 
   activeTabText: {
-    color: colors.textLight,
+    color: "#fff",
   },
 
-  activeIndicator: {
+  tabIndicator: {
     marginTop: 4,
-    width: 18,
+    width: 22,
     height: 3,
     borderRadius: 2,
-    backgroundColor: colors.secondary,
+    backgroundColor: "#fff",
   },
 
-  emptyContainer: {
+
+  centerEmptyContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 30,
   },
 
   emptyText: {
@@ -261,21 +337,28 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     backgroundColor: "#fff",
-    margin: 15,
+    marginHorizontal: 16,
+    marginVertical: 8,
     padding: 12,
-    borderRadius: 14,
+    borderRadius: 16,
     elevation: 4,
+    alignItems: "center",
   },
 
   cardImg: {
-    width: 75,
-    height: 75,
-    borderRadius: 10,
+    width: 80,
+    height: 80,
+    borderRadius: 12,
+  },
+
+  cardContent: {
+    flex: 1,
+    marginLeft: 12,
   },
 
   title: {
     fontSize: 15,
-    fontWeight: "700",
+    fontWeight: "800",
     color: colors.textDark,
   },
 
@@ -287,25 +370,25 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 2,
+    marginTop: 4,
   },
 
   infoText: {
     fontSize: 13,
-    marginLeft: 4,
+    marginLeft: 6,
     color: "#555",
   },
 
   distance: {
-    color: colors.primary,
+    fontSize: 13,
+    marginLeft: 4,
     fontWeight: "700",
   },
 
   statusBox: {
     paddingVertical: 6,
     paddingHorizontal: 12,
-    borderRadius: 8,
-    alignSelf: "flex-start",
+    borderRadius: 10,
   },
 
   statusText: {
@@ -314,7 +397,70 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 
-  accept: { backgroundColor: colors.primary },   // ACCEPT
-  completed: { backgroundColor: "green" },       // COMPLETED
-  cancel: { backgroundColor: "#FF3B30" },        // CANCEL
+  sheetOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "flex-end",
+  },
+
+  sheet: {
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+
+  sheetItem: {
+    paddingVertical: 16,
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+
+  sheetText: {
+    fontSize: 16,
+    fontWeight: "700",
+  },
+
+  cancelItem: {
+    borderBottomWidth: 0,
+  },
+
+  cancelText: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: colors.primary,
+  },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "flex-end",
+  },
+
+  modalCard: {
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 16,
+  },
+
+  modalTitle: {
+    fontSize: 16,
+    fontWeight: "800",
+    marginBottom: 10,
+  },
+
+  clearBtn: {
+    marginTop: 10,
+    padding: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    alignItems: "center",
+  },
+
+  clearText: {
+    color: colors.primary,
+    fontWeight: "700",
+  },
 });

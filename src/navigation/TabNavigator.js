@@ -2,9 +2,10 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { View } from "react-native";
 
 import HomeScreen from "../screens/HomeScreen";
-import ExploreScreen from "../screens/ExploreScreen"; 
+import ExploreScreen from "../screens/ExploreScreen";
 import ProfileScreen from "../screens/Profile/ProfileScreen";
 import MoreScreen from "../screens/MoreScreen";
 import colors from "../constants/colors";
@@ -20,33 +21,53 @@ const TabNavigator = () => {
         headerShown: false,
 
         tabBarStyle: {
-          backgroundColor: "#ffffff",
-          height: 60 + insets.bottom,              // ⬅ Add safe bottom padding
-          paddingBottom: insets.bottom,            // Keep icons up
+          backgroundColor: "#ffffffff",
+          height: 60 + insets.bottom,
+          paddingBottom: insets.bottom,
           borderTopWidth: 0.5,
-          borderTopColor: "#e0e0e0",
+          borderTopColor: "#c7cbfeff",
         },
 
         tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: "#555",
-        tabBarItemStyle: { paddingVertical: 4 },
+        tabBarInactiveTintColor: "#777",
+
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: "600",
-          marginBottom: 2,
+          marginBottom: 1,
         },
 
-        tabBarIcon: ({ color }) => {
-          let iconName =
-            route.name === "Home"
-              ? "home-outline"
-              : route.name === "Location"
-              ? "location-outline"
-              : route.name === "Profile"
-              ? "person-outline"
-              : "menu-outline";
+        tabBarItemStyle: {
+          paddingVertical: 2,
+        },
 
-          return <Ionicons name={iconName} size={25} color={color} />;
+        tabBarIcon: ({ focused, color }) => {
+          let iconName;
+
+          if (route.name === "Home") {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "Location") {
+            iconName = focused ? "location" : "location-outline";
+          } else if (route.name === "Profile") {
+            iconName = focused ? "person" : "person-outline";
+          } else {
+            iconName = focused ? "menu" : "menu-outline";
+          }
+
+          return (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+                borderTopWidth: focused ? 3 : 0,
+                borderTopColor: focused ? colors.primary : "transparent",
+                paddingTop: 3,
+              }}
+            >
+              <Ionicons name={iconName} size={25} color={color} />
+            </View>
+          );
         },
       })}
     >

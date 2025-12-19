@@ -21,7 +21,7 @@ const ProfileScreen = () => {
     <View style={styles.container}>
       {/* Header */}
       <LinearGradient
-        colors={["#0066FF", "#7abbfcff"]}
+        colors={["#0F3C91", "#518EFF"]}
         start={{ x: 1, y: 1 }}
         end={{ x: 1, y: 0 }}
         style={styles.header}

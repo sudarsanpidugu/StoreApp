@@ -95,7 +95,9 @@ const AddVehical = () => {
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
 
-      <LinearGradient colors={[colors.primary, "#4ca3ff"]} style={styles.headerGradient} />
+      <LinearGradient colors={["#0F3C91", "#518EFF"]}
+        start={{ x: 1, y: 1 }}
+        end={{ x: 1, y: 0 }} style={styles.headerGradient} />
 
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.headerArea}>
