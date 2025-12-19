@@ -41,7 +41,7 @@ const ActionStatsCards = () => {
           <TouchableOpacity
             key={item.id}
             style={styles.card}
-            activeOpacity={0.8}
+            activeOpacity={0.85}
             onPress={() => navigation.navigate(item.route)}
           >
             <View
@@ -50,11 +50,7 @@ const ActionStatsCards = () => {
                 { backgroundColor: `${item.color}20` },
               ]}
             >
-              <Ionicons
-                name={item.icon}
-                size={22}
-                color={item.color}
-              />
+              <Ionicons name={item.icon} size={22} color={item.color} />
             </View>
 
             <Text style={styles.count}>{item.count}</Text>
@@ -68,21 +64,20 @@ const ActionStatsCards = () => {
 
 export default ActionStatsCards;
 
-/* STYLES */
+/* ---------------- STYLES ---------------- */
 const styles = StyleSheet.create({
   container: {
     marginTop: 20,
-    paddingHorizontal: 15,
+    paddingHorizontal: 16,
   },
 
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
   },
 
   card: {
-    width: 130,
+    width: "31%", 
     backgroundColor: "#fff",
     borderRadius: 14,
     paddingVertical: 16,
@@ -98,7 +93,7 @@ const styles = StyleSheet.create({
   iconWrapper: {
     width: 44,
     height: 44,
-    borderRadius: 42,
+    borderRadius: 22,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 8,

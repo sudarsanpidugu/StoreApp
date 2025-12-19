@@ -3,8 +3,6 @@ import { View, StyleSheet, FlatList } from "react-native";
 import Header from "../components/Header";
 import colors from "../constants/colors";
 import BannerSlider from "./BannerSlider";
-import ServicesScreen from "./ServicesScreen";
-import PopularServiceProviders from "./PopularServiceProvider";
 import ActionStatsCards from "./ActionStatsCards";
 
 const HomeScreen = () => {
@@ -13,14 +11,12 @@ const HomeScreen = () => {
       <Header />
 
       <FlatList
-        data={[1]}  // dummy item to enable FlatList
+        data={[1]} 
         keyExtractor={(item) => item.toString()}
-        // renderItem={() => <PopularServiceProviders />}
         ListHeaderComponent={
           <>
             <BannerSlider />
             <ActionStatsCards />
-            {/* <ServicesScreen /> */}
           </>
         }
         showsVerticalScrollIndicator={false}

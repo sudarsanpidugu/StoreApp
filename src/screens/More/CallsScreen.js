@@ -9,8 +9,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
-import colors from "../constants/colors";
-import CommonHeader from "../screens/More/CommonHeader";
+import colors from "../../constants/colors";
+import CommonHeader from "./CommonHeader";
 
 /* ---------------- INITIAL CALL DATA ---------------- */
 const INITIAL_CALLS = [

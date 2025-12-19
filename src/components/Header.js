@@ -13,7 +13,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import { LocationContext } from "../screens/LocationContext";
+import { LocationContext } from "../constants/LocationContext";
 import colors from "../constants/colors";
 
 const Header = () => {
@@ -23,7 +23,11 @@ const Header = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="light-content"
+      />
 
       <LinearGradient
         colors={["#0F3C91", "#518EFF"]}
@@ -49,10 +53,18 @@ const Header = () => {
             </TouchableOpacity>
           </View>
 
-          {/* RIGHT : ALWAYS AT END */}
+          {/* RIGHT : NOTIFICATION + SWITCH */}
           <View style={styles.rightActions}>
-            <TouchableOpacity>
-              <Ionicons name="notifications-outline" size={24} color="#fff" />
+            {/* 🔔 NOTIFICATION BUTTON */}
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Notification")}
+              style={{ marginRight: 10 }}
+            >
+              <Ionicons
+                name="notifications-outline"
+                size={24}
+                color="#fff"
+              />
             </TouchableOpacity>
 
             <Switch
@@ -81,6 +93,7 @@ const Header = () => {
 
 export default Header;
 
+/* ================= STYLES ================= */
 const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: "#0F3C91",
@@ -95,12 +108,12 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between", 
+    justifyContent: "space-between",
   },
 
   /* LEFT SIDE */
   leftSection: {
-    maxWidth: "70%",     
+    maxWidth: "70%",
   },
 
   brandText: {
@@ -120,9 +133,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "700",
-    maxWidth: "90%",     
+    maxWidth: "90%",
   },
 
+  /* RIGHT SIDE */
   rightActions: {
     flexDirection: "row",
     alignItems: "center",
@@ -150,4 +164,3 @@ const styles = StyleSheet.create({
     color: "#111827",
   },
 });
-

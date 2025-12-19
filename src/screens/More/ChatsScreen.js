@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
-import colors from "../constants/colors";
-import CommonHeader from "../screens/More/CommonHeader";
+import colors from "../../constants/colors";
+import CommonHeader from "./CommonHeader";
 
 /* ---------------- INITIAL CHAT DATA ---------------- */
 const INITIAL_CHATS = [

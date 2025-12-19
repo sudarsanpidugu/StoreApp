@@ -38,7 +38,7 @@ const INITIAL_BOOKINGS = [
     date: "2025-01-20",
     displayDate: "20 Jan 2025",
     time: "10:00 AM",
-    status: "Upcoming",
+    status: "Accept", // ✅ ACCEPT
     distance: "3.4 km",
     image: require("../../../assets/Image/provider/p3.jpg"),
   },
@@ -49,7 +49,7 @@ const INITIAL_BOOKINGS = [
     date: "2025-01-05",
     displayDate: "05 Jan 2025",
     time: "02:15 PM",
-    status: "Cancelled",
+    status: "Cancel",
     distance: "2.1 km",
     image: require("../../../assets/Image/provider/p2.jpg"),
   },
@@ -62,30 +62,17 @@ const BookingHistory = () => {
   const [filterVisible, setFilterVisible] = useState(false);
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [activeTab, setActiveTab] = useState("Accept");
 
-  /* ---------------- FILTERED BOOKINGS ---------------- */
-  const filteredBookings = selectedDate
-    ? bookingList.filter((b) => b.date === selectedDate)
-    : bookingList;
-
-  /* ---------------- DELETE ALL ---------------- */
-  const deleteAllBookings = () => {
-    Alert.alert(
-      "Delete All Bookings",
-      "Are you sure you want to delete all booking history?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: () => setBookingList([]),
-        },
-      ]
-    );
-  };
+  /* ---------------- FILTER BOOKINGS ---------------- */
+  const filteredBookings = bookingList.filter((b) => {
+    const statusMatch = b.status === activeTab;
+    const dateMatch = selectedDate ? b.date === selectedDate : true;
+    return statusMatch && dateMatch;
+  });
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
 
       {/* HEADER GRADIENT */}
@@ -103,29 +90,46 @@ const BookingHistory = () => {
 
           <Text style={styles.headerTitle}>Booking History</Text>
 
-          {/* FILTER ICON */}
           <TouchableOpacity onPress={() => setFilterVisible(true)}>
             <Ionicons name="filter-outline" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
 
-        {/* CONTENT */}
+        {/* ---------------- TABS ---------------- */}
+        <View style={styles.tabsContainer}>
+          {["Accept", "Completed", "Cancel"].map((tab) => (
+            <TouchableOpacity
+              key={tab}
+              style={[
+                styles.tab,
+                activeTab === tab && styles.activeTab,
+              ]}
+              onPress={() => setActiveTab(tab)}
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === tab && styles.activeTabText,
+                ]}
+              >
+                {tab}
+              </Text>
+
+              {activeTab === tab && (
+                <View style={styles.activeIndicator} />
+              )}
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* ---------------- CONTENT ---------------- */}
         {filteredBookings.length === 0 ? (
-          /* EMPTY STATE (CENTERED) */
           <View style={styles.emptyContainer}>
-            <Ionicons
-              name="calendar-outline"
-              size={52}
-              color="#9CA3AF"
-            />
-            <Text style={styles.emptyText}>No booking history</Text>
+            <Ionicons name="calendar-outline" size={52} color={colors.gray} />
+            <Text style={styles.emptyText}>No bookings found</Text>
           </View>
         ) : (
-          /* BOOKINGS LIST */
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 20 }}
-          >
+          <ScrollView showsVerticalScrollIndicator={false}>
             {filteredBookings.map((item) => (
               <View key={item.id} style={styles.card}>
                 <Image source={item.image} style={styles.cardImg} />
@@ -142,25 +146,22 @@ const BookingHistory = () => {
                   </View>
 
                   <View style={styles.row}>
-                    <Entypo
-                      name="location-pin"
-                      size={18}
-                      color={colors.primary}
-                    />
+                    <Entypo name="location-pin" size={18} color={colors.primary} />
                     <Text style={[styles.infoText, styles.distance]}>
                       {item.distance}
                     </Text>
                   </View>
                 </View>
 
+                {/* STATUS */}
                 <View
                   style={[
                     styles.statusBox,
                     item.status === "Completed"
                       ? styles.completed
-                      : item.status === "Upcoming"
-                      ? styles.upcoming
-                      : styles.cancelled,
+                      : item.status === "Accept"
+                      ? styles.accept
+                      : styles.cancel,
                   ]}
                 >
                   <Text style={styles.statusText}>{item.status}</Text>
@@ -170,98 +171,6 @@ const BookingHistory = () => {
           </ScrollView>
         )}
       </SafeAreaView>
-
-      {/* FILTER MENU */}
-      <Modal visible={filterVisible} transparent animationType="fade">
-        <TouchableOpacity
-          style={styles.filterOverlay}
-          activeOpacity={1}
-          onPress={() => setFilterVisible(false)}
-        >
-          <View style={styles.filterBox}>
-            {/* DATE FILTER */}
-            <TouchableOpacity
-              style={styles.filterItem}
-              onPress={() => {
-                setFilterVisible(false);
-                setCalendarVisible(true);
-              }}
-            >
-              <Ionicons
-                name="calendar-outline"
-                size={18}
-                color={colors.primary}
-              />
-              <Text style={styles.filterText}>Filter by Date</Text>
-            </TouchableOpacity>
-
-            {/* CLEAR FILTER */}
-            <TouchableOpacity
-              style={styles.filterItem}
-              onPress={() => {
-                setSelectedDate(null);
-                setFilterVisible(false);
-              }}
-            >
-              <Ionicons
-                name="close-circle-outline"
-                size={18}
-                color="#555"
-              />
-              <Text style={styles.filterText}>Clear Filter</Text>
-            </TouchableOpacity>
-
-            {/* DELETE ALL */}
-            <TouchableOpacity
-              style={styles.filterItem}
-              onPress={() => {
-                setFilterVisible(false);
-                deleteAllBookings();
-              }}
-            >
-              <Ionicons
-                name="trash-outline"
-                size={18}
-                color="#FF3B30"
-              />
-              <Text style={[styles.filterText, { color: "#FF3B30" }]}>
-                Delete All
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      </Modal>
-
-      {/* CALENDAR MODAL */}
-      <Modal visible={calendarVisible} transparent animationType="fade">
-        <View style={styles.calendarOverlay}>
-          <View style={styles.calendarBox}>
-            <TouchableOpacity
-              style={styles.closeIcon}
-              onPress={() => setCalendarVisible(false)}
-            >
-              <Ionicons name="close" size={22} />
-            </TouchableOpacity>
-
-            <Calendar
-              onDayPress={(day) => {
-                setSelectedDate(day.dateString);
-                setCalendarVisible(false);
-              }}
-              markedDates={
-                selectedDate
-                  ? {
-                      [selectedDate]: {
-                        selected: true,
-                        selectedColor: colors.primary,
-                      },
-                    }
-                  : {}
-              }
-            />
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };
@@ -283,7 +192,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 14,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
   },
 
@@ -293,6 +201,47 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     flex: 1,
     textAlign: "center",
+  },
+
+  /* TABS */
+  tabsContainer: {
+    flexDirection: "row",
+    marginHorizontal: 16,
+    marginTop: 12,
+    backgroundColor: colors.background,
+    borderRadius: 16,
+    padding: 4,
+    borderWidth: 1,
+    borderColor: colors.gray,
+  },
+
+  tab: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 14,
+    alignItems: "center",
+  },
+
+  activeTab: {
+    backgroundColor: colors.primary,
+  },
+
+  tabText: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: colors.textSecondary,
+  },
+
+  activeTabText: {
+    color: colors.textLight,
+  },
+
+  activeIndicator: {
+    marginTop: 4,
+    width: 18,
+    height: 3,
+    borderRadius: 2,
+    backgroundColor: colors.secondary,
   },
 
   emptyContainer: {
@@ -306,18 +255,16 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 16,
     fontWeight: "700",
-    color: "#9CA3AF",
+    color: colors.gray,
   },
 
   card: {
     flexDirection: "row",
     backgroundColor: "#fff",
-    marginHorizontal: 15,
-    marginTop: 15,
+    margin: 15,
     padding: 12,
     borderRadius: 14,
-    elevation: 5,
-    alignItems: "center",
+    elevation: 4,
   },
 
   cardImg: {
@@ -334,8 +281,7 @@ const styles = StyleSheet.create({
 
   service: {
     fontSize: 12,
-    color: "#777",
-    marginBottom: 4,
+    color: colors.textSecondary,
   },
 
   row: {
@@ -356,9 +302,10 @@ const styles = StyleSheet.create({
   },
 
   statusBox: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 8,
+    alignSelf: "flex-start",
   },
 
   statusText: {
@@ -367,57 +314,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 
-  completed: { backgroundColor: "green" },
-  upcoming: { backgroundColor: "#FFA500" },
-  cancelled: { backgroundColor: "#FF3B30" },
-
-  filterOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.2)",
-    justifyContent: "flex-start",
-    alignItems: "flex-end",
-    paddingTop: 100,
-    paddingRight: 16,
-  },
-
-  filterBox: {
-    backgroundColor: "#fff",
-    width: 200,
-    borderRadius: 12,
-    elevation: 6,
-  },
-
-  filterItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    padding: 14,
-  },
-
-  filterText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: colors.textDark,
-  },
-
-  calendarOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.45)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  calendarBox: {
-    width: "90%",
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 16,
-  },
-
-  closeIcon: {
-    position: "absolute",
-    top: 12,
-    right: 12,
-    zIndex: 10,
-  },
+  accept: { backgroundColor: colors.primary },   // ACCEPT
+  completed: { backgroundColor: "green" },       // COMPLETED
+  cancel: { backgroundColor: "#FF3B30" },        // CANCEL
 });

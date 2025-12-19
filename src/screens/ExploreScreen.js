@@ -13,7 +13,7 @@ import MapView from "react-native-maps";
 import * as Location from "expo-location";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { LocationContext } from "../screens/LocationContext";
+import { LocationContext } from "../constants/LocationContext";
 import colors from "../constants/colors";
 
 

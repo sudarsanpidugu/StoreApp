@@ -12,7 +12,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import colors from "../constants/colors";
+import colors from "../../constants/colors";
 
 const OtpLoginScreen = ({ navigation }) => {
   const [mobile, setMobile] = useState("");
@@ -84,7 +84,7 @@ const OtpLoginScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
-        source={require("../../assets/Image/icons/store.png")}
+        source={require("../../../assets/Image/icons/store.png")}
         style={styles.background}
         resizeMode="cover"
       >

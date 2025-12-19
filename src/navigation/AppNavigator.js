@@ -3,13 +3,12 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 /* ---------- CONTEXT ---------- */
-import { LocationProvider } from "../screens/LocationContext";
+import { LocationProvider } from "../constants/LocationContext";
 
 /* ---------- AUTH SCREENS ---------- */
 import WelcomeScreen from "../screens/WelcomeScreen";
 import LoginScreen from "../screens/Auth/LoginScreen";
-import SignupScreen from "../screens/Auth/SignupScreen";
-import OtpLoginScreen from "../screens/OtpLoginScreen";
+import OtpLoginScreen from "../screens/Auth/OtpLoginScreen";
 
 /* ---------- MAIN NAV ---------- */
 import TabNavigator from "./TabNavigator";
@@ -17,19 +16,15 @@ import TabNavigator from "./TabNavigator";
 /* ---------- HOME / GENERAL ---------- */
 import HomeScreen from "../screens/HomeScreen";
 import NotificationScreen from "../screens/NotificationScreen";
-import ServiceDetailScreen from "../screens/ServiceDetailScreen";
-import ServiceListScreen from "../screens/ServiceListScreen";
 import ExploreScreen from "../screens/ExploreScreen";
 
 /* ---------- ORDERS ---------- */
-import BooknowScreen from "../screens/Orders/BooknowScreen";
 import BookingHistory from "../screens/Orders/BookingHistory";
-import BookingOffer from "../screens/Orders/BookingOffer";
 
 /* ---------- STORE / COMM ---------- */
 import StoreServicesScreen from "../screens/StoreServicesScreen";
-import CallsScreen from "../screens/CallsScreen";
-import ChatsScreen from "../screens/ChatsScreen";
+import CallsScreen from "../screens/More/CallsScreen";
+import ChatsScreen from "../screens/More/ChatsScreen";
 
 /* ---------- PROFILE ---------- */
 import ProfileScreen from "../screens/Profile/ProfileScreen";
@@ -45,6 +40,9 @@ import RateUsScreen from "../screens/More/RateUsScreen";
 import FaqsScreen from "../screens/More/FaqsScreen";
 import ContactUsScreen from "../screens/More/ContactUsScreen";
 import CommonHeader from "../screens/More/CommonHeader";
+import PlansScreen from "../screens/PlansScreen";
+import BookingDetailsScreen from "../screens/Orders/BookingDetailsScreen";
+import PramotionScreen from "../screens/PromotionScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -59,7 +57,6 @@ const AppNavigator = () => {
           {/* ---------- AUTH ---------- */}
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="OtpLogin" component={OtpLoginScreen} />
 
           {/* ---------- MAIN TABS ---------- */}
@@ -70,14 +67,13 @@ const AppNavigator = () => {
 
           {/* ---------- GENERAL ---------- */}
           <Stack.Screen name="Notification" component={NotificationScreen} />
-          <Stack.Screen name="ServiceDetails" component={ServiceDetailScreen} />
-          <Stack.Screen name="Servicelist" component={ServiceListScreen} />
           <Stack.Screen name="Explore" component={ExploreScreen} />
+          <Stack.Screen name="Plan" component={PlansScreen} />
+          <Stack.Screen name="BookingDetails" component={BookingDetailsScreen} />
+          <Stack.Screen name="Pramotion" component={PramotionScreen} />
 
           {/* ---------- ORDERS ---------- */}
-          <Stack.Screen name="Booknow" component={BooknowScreen} />
           <Stack.Screen name="BookingHistory" component={BookingHistory} />
-          <Stack.Screen name="BookingOffer" component={BookingOffer} />
 
           {/* ---------- STORE / COMM ---------- */}
           <Stack.Screen name="StoreServices" component={StoreServicesScreen} />

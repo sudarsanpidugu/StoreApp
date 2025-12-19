@@ -20,7 +20,7 @@ const CommonHeader = ({ title, rightComponent }) => {
         style={styles.headerGradient}
       >
         <View style={styles.row}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity style={styles.goBack} onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
 
@@ -61,4 +61,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     marginLeft: -12,
   },
+
+  goBack: {
+    backgroundColor:colors.gray,
+    padding:4,
+    borderRadius:6,
+  }
 });

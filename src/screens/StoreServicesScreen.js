@@ -10,6 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../constants/colors";
 import CommonHeader from "./More/CommonHeader";
+import CarOfferCard from "../components/CarOfferCard";
 
 const StoreServicesScreen = () => {
     const navigation = useNavigation();
@@ -33,28 +34,40 @@ const StoreServicesScreen = () => {
                     </Text>
 
                     {/* PRIMARY SERVICE (LIKE AIRTEL BLACK) */}
-                    <View style={styles.mainServiceRow}>
-                        <View style={styles.mainIcon}>
-                            <Ionicons
-                                name="car-sport-outline"
-                                size={22}
-                                color={colors.primary}
-                            />
+                    {/* ================= ACTIVE PLAN ================= */}
+                    <View style={styles.activePlanCard}>
+                        <View style={styles.activeHeader}>
+                            <Text style={styles.activeTitle}>Active Plan</Text>
+
+                            <View style={styles.activeBadge}>
+                                <Text style={styles.activeBadgeText}>ACTIVE</Text>
+                            </View>
                         </View>
 
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.mainTitle}>Car Store Premium</Text>
-                            <Text style={styles.mainSub}>
-                                2 active vehicles connected
-                            </Text>
+                        <Text style={styles.planName}>Car Store Premium</Text>
+
+                        <View style={styles.planRow}>
+                            <View>
+                                <Text style={styles.planValue}>₹499</Text>
+                                <Text style={styles.planLabel}>Price</Text>
+                            </View>
+
+                            <View>
+                                <Text style={styles.planValue}>3 Months</Text>
+                                <Text style={styles.planLabel}>Validity</Text>
+                            </View>
+
+                            <View>
+                                <Text style={styles.planValue}>14 Days</Text>
+                                <Text style={styles.planLabel}>Next Service</Text>
+                            </View>
                         </View>
 
-                        <Ionicons
-                            name="chevron-forward"
-                            size={18}
-                            color={colors.gray}
-                        />
+                        <Text style={styles.renewText}>
+                            Renews on <Text style={{ fontWeight: "700" }}>28 Sep 2025</Text>
+                        </Text>
                     </View>
+
 
                     {/* BILL INFO */}
                     <Text style={styles.billText}>
@@ -146,18 +159,45 @@ const StoreServicesScreen = () => {
 
                     {/* ACTION BUTTONS */}
                     <View style={styles.buttonRow}>
-                        <TouchableOpacity style={styles.outlineBtn}>
+                        <TouchableOpacity style={styles.outlineBtn}  onPress={() => navigation.navigate("Plan")}>
                             <Text style={styles.outlineText}>Change Plan</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             style={styles.primaryBtn}
-                            onPress={() => navigation.navigate("StoreServices")}
+                            onPress={() => navigation.navigate("Plan")}
                         >
                             <Text style={styles.primaryText}>Manage Services</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                 </View>
+
+                {/* <Text style={styles.sectionTitle}>Recommended Car Offers</Text>
+
+                <CarOfferCard
+                    badge="Car Care Combo"
+                    price="279"
+                    service="1 Service"
+                    validity="1 Month"
+                    benefits="Free car wash, oil check & interior cleaning"
+                />
+
+                <CarOfferCard
+                    badge="Premium Maintenance"
+                    price="349"
+                    service="2 Services"
+                    validity="28 Days"
+                    benefits="Engine check, AC service & tyre inspection"
+                />
+
+                <CarOfferCard
+                    badge="Unlimited Checkups"
+                    price="499"
+                    service="Unlimited"
+                    validity="3 Months"
+                    benefits="Priority support & free inspections"
+                /> */}
+
             </ScrollView>
         </>
     );
@@ -199,33 +239,75 @@ const styles = StyleSheet.create({
         fontWeight: "600",
     },
 
-    mainServiceRow: {
+    /* ================= ACTIVE PLAN ================= */
+    activePlanCard: {
+        backgroundColor: colors.textLight,
+        borderRadius: 20,
+        padding: 16,
+        marginBottom: 16,
+        borderWidth: 1,
+        borderColor: colors.primary,
+    },
+
+    activeHeader: {
         flexDirection: "row",
+        justifyContent: "space-between",
         alignItems: "center",
         marginBottom: 8,
     },
 
-    mainIcon: {
-        width: 44,
-        height: 44,
-        borderRadius: 22,
-        backgroundColor: "#EAF0FF",
-        alignItems: "center",
-        justifyContent: "center",
-        marginRight: 12,
-    },
-
-    mainTitle: {
-        fontSize: 15,
+    activeTitle: {
+        fontSize: 14,
         fontWeight: "700",
         color: colors.textDark,
     },
 
-    mainSub: {
+    activeBadge: {
+        backgroundColor: colors.primary,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 12,
+    },
+
+    activeBadgeText: {
+        color: "#fff",
+        fontSize: 11,
+        fontWeight: "700",
+    },
+
+    planName: {
+        fontSize: 16,
+        fontWeight: "800",
+        color: colors.textDark,
+        marginBottom: 12,
+    },
+
+    planRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginBottom: 10,
+    },
+
+    planValue: {
+        fontSize: 16,
+        fontWeight: "800",
+        color: colors.textDark,
+        textAlign: "center",
+    },
+
+    planLabel: {
         fontSize: 12,
         color: colors.textSecondary,
+        textAlign: "center",
         marginTop: 2,
     },
+
+    renewText: {
+        fontSize: 12,
+        color: colors.textSecondary,
+        marginTop: 6,
+    },
+
 
     billText: {
         fontSize: 14,
@@ -306,4 +388,12 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         color: "#fff",
     },
+    sectionTitle: {
+        fontSize: 16,
+        fontWeight: "700",
+        color: colors.textDark,
+        marginTop: 24,
+        marginBottom: 12,
+    },
+
 });
