@@ -150,23 +150,35 @@ const BookingDetailsScreen = () => {
         </View>
 
         {/* ACTION BUTTON */}
-        <View style={styles.actionRow}>
-          {!isAccepted ? (
-            <TouchableOpacity
-              style={styles.acceptBtn}
-              onPress={() => setIsAccepted(true)}
-            >
-              <Text style={styles.btnText}>Accept</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={styles.completedBtn}
-              onPress={() => navigation.navigate("BookingHistory")}
-            >
-              <Text style={styles.btnText}>Completed</Text>
-            </TouchableOpacity>
-          )}
-        </View>
+       <View style={styles.actionRow}>
+  {/* REJECT BUTTON */}
+  {!isAccepted && (
+    <TouchableOpacity
+      style={styles.rejectBtn}
+      onPress={() => navigation.goBack()}
+    >
+      <Text style={styles.btnText}>Reject</Text>
+    </TouchableOpacity>
+  )}
+
+  {/* ACCEPT / COMPLETED */}
+  {!isAccepted ? (
+    <TouchableOpacity
+      style={styles.acceptBtn}
+      onPress={() => setIsAccepted(true)}
+    >
+      <Text style={styles.btnText}>Accept</Text>
+    </TouchableOpacity>
+  ) : (
+    <TouchableOpacity
+      style={styles.completedBtn}
+      onPress={() => navigation.navigate("BookingHistory")}
+    >
+      <Text style={styles.btnText}>Completed</Text>
+    </TouchableOpacity>
+  )}
+</View>
+
       </View>
     </View>
   );
@@ -261,21 +273,42 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 
-  actionRow: { marginTop: 16 },
+rejectBtn: {
+  flex: 1,
+  backgroundColor: "#FF3B30",
+  paddingVertical: 14,
+  borderRadius: 12,
+  alignItems: "center",
+  marginRight: 10,
+},
 
-  acceptBtn: {
-    backgroundColor: colors.primary,
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: "center",
-  },
+acceptBtn: {
+  flex: 1,
+  backgroundColor: "#22C55E",
+  paddingVertical: 14,
+  borderRadius: 12,
+  alignItems: "center",
+},
 
-  completedBtn: {
-    backgroundColor: "#16A34A",
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: "center",
-  },
+completedBtn: {
+  flex: 1,
+  backgroundColor: "#2E7D32",
+  paddingVertical: 14,
+  borderRadius: 12,
+  alignItems: "center",
+},
+
+btnText: {
+  color: "#fff",
+  fontWeight: "800",
+  fontSize: 15,
+},
+
+actionRow: {
+  flexDirection: "row",
+  marginTop: 20,
+},
+
 
   btnText: { color: "#fff", fontWeight: "800" },
 });

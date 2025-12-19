@@ -67,13 +67,13 @@ const BookingHistory = () => {
   const [bookings, setBookings] = useState(INITIAL_BOOKINGS);
   const [activeTab, setActiveTab] = useState("Create");
   const [selectedDate, setSelectedDate] = useState(null);
-  const [filterSheetVisible, setFilterSheetVisible] = useState(false);
+  const [filterVisible, setFilterVisible] = useState(false);
   const [calendarVisible, setCalendarVisible] = useState(false);
 
   /* ---------------- FILTER BOOKINGS ---------------- */
-  const filteredBookings = bookings.filter((b) => {
-    const statusMatch = b.status === activeTab;
-    const dateMatch = selectedDate ? b.date === selectedDate : true;
+  const filteredBookings = bookings.filter((item) => {
+    const statusMatch = item.status === activeTab;
+    const dateMatch = selectedDate ? item.date === selectedDate : true;
     return statusMatch && dateMatch;
   });
 
@@ -81,20 +81,21 @@ const BookingHistory = () => {
   const deleteAllBookings = () => {
     setBookings([]);
     setSelectedDate(null);
-    setFilterSheetVisible(false);
+    setFilterVisible(false);
   };
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
 
-      {/* HEADER */}
+      {/* HEADER BG */}
       <LinearGradient
         colors={[colors.primary, "#4ca3ff"]}
         style={styles.headerGradient}
       />
 
       <SafeAreaView style={{ flex: 1 }}>
+        {/* HEADER */}
         <View style={styles.headerArea}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
@@ -102,12 +103,11 @@ const BookingHistory = () => {
 
           <Text style={styles.headerTitle}>Booking History</Text>
 
-          <TouchableOpacity onPress={() => setFilterSheetVisible(true)}>
+          <TouchableOpacity onPress={() => setFilterVisible(true)}>
             <Ionicons name="filter-outline" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
 
-        {/* ---------------- STATUS TABS ---------------- */}
         <View style={styles.tabsContainer}>
           {["Create", "In Progress", "Completed"].map((tab) => {
             const isActive = activeTab === tab;
@@ -116,111 +116,139 @@ const BookingHistory = () => {
             return (
               <TouchableOpacity
                 key={tab}
-                style={[styles.tab, isActive && { backgroundColor: tabColor }]}
+                style={[
+                  styles.tab,
+                  isActive && { backgroundColor: tabColor },
+                ]}
                 onPress={() => setActiveTab(tab)}
+                activeOpacity={0.85}
               >
-                <Text style={[styles.tabText, isActive && styles.activeTabText]}>
+                <Text
+                  style={[
+                    styles.tabText,
+                    { color: tabColor },          // 👈 default color
+                    isActive && styles.activeTabText,
+                  ]}
+                >
                   {tab}
                 </Text>
-                {isActive && <View style={styles.tabIndicator} />}
+
+                {isActive && <View style={styles.underline} />}
               </TouchableOpacity>
             );
           })}
         </View>
 
-        {/* ---------------- CONTENT ---------------- */}
+
+
+        {/* CONTENT */}
         {filteredBookings.length === 0 ? (
-          <View style={styles.centerEmptyContainer}>
+          <View style={styles.emptyContainer}>
             <Ionicons name="calendar-outline" size={60} color={colors.gray} />
             <Text style={styles.emptyText}>No bookings found</Text>
           </View>
         ) : (
           <ScrollView showsVerticalScrollIndicator={false}>
-            {filteredBookings.map((item) => (
-              <View key={item.id} style={styles.card}>
-                <Image source={item.image} style={styles.cardImg} />
+            {filteredBookings.map((item) => {
+              const isCreate = item.status === "Create";
+              const Wrapper = isCreate ? TouchableOpacity : View;
 
-                <View style={styles.cardContent}>
-                  <Text style={styles.title}>{item.name}</Text>
-                  <Text style={styles.service}>{item.service}</Text>
-
-                  <View style={styles.row}>
-                    <Ionicons name="calendar-outline" size={14} color="#666" />
-                    <Text style={styles.infoText}>
-                      {item.displayDate} • {item.time}
-                    </Text>
-                  </View>
-
-                  <View style={styles.row}>
-                    <Entypo
-                      name="location-pin"
-                      size={16}
-                      color={STATUS_COLORS[item.status]}
-                    />
-                    <Text
-                      style={[
-                        styles.distance,
-                        { color: STATUS_COLORS[item.status] },
-                      ]}
-                    >
-                      {item.distance}
-                    </Text>
-                  </View>
-                </View>
-
-                {/* STATUS BADGE */}
-                <View
+              return (
+                <Wrapper
+                  key={item.id}
+                  activeOpacity={0.85}
+                  onPress={() =>
+                    isCreate &&
+                    navigation.navigate("BookingDetails", {
+                      bookingId: item.id,
+                      bookingData: item,
+                    })
+                  }
                   style={[
-                    styles.statusBox,
-                    { backgroundColor: STATUS_COLORS[item.status] },
+                    styles.card,
+                    isCreate && styles.clickableCard,
                   ]}
                 >
-                  <Text style={styles.statusText}>{item.status}</Text>
-                </View>
-              </View>
-            ))}
+                  <Image source={item.image} style={styles.cardImg} />
+
+                  <View style={styles.cardContent}>
+                    <Text style={styles.title}>{item.name}</Text>
+                    <Text style={styles.service}>{item.service}</Text>
+
+                    <View style={styles.row}>
+                      <Ionicons
+                        name="calendar-outline"
+                        size={14}
+                        color="#666"
+                      />
+                      <Text style={styles.infoText}>
+                        {item.displayDate} • {item.time}
+                      </Text>
+                    </View>
+
+                    <View style={styles.row}>
+                      <Entypo
+                        name="location-pin"
+                        size={16}
+                        color={STATUS_COLORS[item.status]}
+                      />
+                      <Text
+                        style={[
+                          styles.distance,
+                          { color: STATUS_COLORS[item.status] },
+                        ]}
+                      >
+                        {item.distance}
+                      </Text>
+                    </View>
+                  </View>
+
+                  {/* STATUS */}
+                  <View
+                    style={[
+                      styles.statusBox,
+                      { backgroundColor: STATUS_COLORS[item.status] },
+                    ]}
+                  >
+                    <Text style={styles.statusText}>{item.status}</Text>
+                  </View>
+                </Wrapper>
+              );
+            })}
           </ScrollView>
         )}
       </SafeAreaView>
 
-      {/* ---------------- FILTER POPUP ---------------- */}
-      <Modal transparent animationType="fade" visible={filterSheetVisible}>
-        <View style={styles.centerOverlay}>
-          <View style={styles.filterPopup}>
+      {/* FILTER MODAL */}
+      <Modal transparent animationType="fade" visible={filterVisible}>
+        <View style={styles.overlay}>
+          <View style={styles.popup}>
             <Text style={styles.popupTitle}>Filter Options</Text>
 
-            <TouchableOpacity style={styles.popupItem} onPress={deleteAllBookings}>
-              <Text style={[styles.popupText, { color: "#FF3B30" }]}>
-                Delete All
-              </Text>
+            <TouchableOpacity onPress={deleteAllBookings}>
+              <Text style={styles.deleteText}>Delete All</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={styles.popupItem}
               onPress={() => {
-                setFilterSheetVisible(false);
+                setFilterVisible(false);
                 setCalendarVisible(true);
               }}
             >
               <Text style={styles.popupText}>Filter by Date</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.popupItem}
-              onPress={() => setFilterSheetVisible(false)}
-            >
+            <TouchableOpacity onPress={() => setFilterVisible(false)}>
               <Text style={styles.cancelText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
 
-      {/* ---------------- DATE FILTER ---------------- */}
+      {/* CALENDAR */}
       <Modal transparent animationType="slide" visible={calendarVisible}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>Select Date</Text>
-
+        <View style={styles.overlayBottom}>
+          <View style={styles.calendarCard}>
             <Calendar
               onDayPress={(day) => {
                 setSelectedDate(day.dateString);
@@ -236,7 +264,6 @@ const BookingHistory = () => {
 
 export default BookingHistory;
 
-
 /* ---------------- STYLES ---------------- */
 const styles = StyleSheet.create({
   headerGradient: {
@@ -244,8 +271,8 @@ const styles = StyleSheet.create({
     top: 0,
     width: "100%",
     height: Platform.OS === "android" ? StatusBar.currentHeight + 110 : 130,
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
   },
 
   headerArea: {
@@ -256,55 +283,69 @@ const styles = StyleSheet.create({
   },
 
   headerTitle: {
+    flex: 1,
+    textAlign: "center",
     color: "#fff",
     fontSize: 20,
     fontWeight: "900",
-    flex: 1,
-    textAlign: "center",
   },
 
   tabsContainer: {
     flexDirection: "row",
-    marginHorizontal: 16,
-    marginTop: 12,
     backgroundColor: "#fff",
-    borderRadius: 18,
+    margin: 20,
+    borderRadius: 16,
     padding: 4,
     elevation: 3,
   },
 
+  textWrapper: {
+    paddingBottom: 4,
+    alignItems: "center",
+  },
+
+  activeTextWrapper: {
+    borderBottomWidth: 2,
+    borderBottomColor: "#fff",
+  },
+
+
+  activeTabText: {
+    color: "#fff",
+    fontWeight: "800",
+  },
+
   tab: {
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: 8,
     borderRadius: 14,
     alignItems: "center",
-    justifyContent: "center",
   },
 
   tabText: {
     fontSize: 13,
     fontWeight: "700",
-    color: colors.textSecondary,
   },
 
   activeTabText: {
     color: "#fff",
+    fontWeight: "800",
   },
 
-  tabIndicator: {
-    marginTop: 4,
-    width: 22,
+  underline: {
+    marginTop: 3,
     height: 3,
-    borderRadius: 2,
+    width: 18,
     backgroundColor: "#fff",
+    borderRadius: 2,
   },
 
 
-  centerEmptyContainer: {
+  emptyContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 30,
+    marginTop: 40,
   },
 
   emptyText: {
@@ -325,6 +366,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
+  clickableCard: {
+    borderWidth: 1,
+    borderColor: "#F59E0B",
+  },
+
   cardImg: {
     width: 80,
     height: 80,
@@ -339,7 +385,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     fontWeight: "800",
-    color: colors.textDark,
   },
 
   service: {
@@ -372,75 +417,59 @@ const styles = StyleSheet.create({
   },
 
   statusText: {
+    color: "#fff",
     fontSize: 12,
     fontWeight: "800",
-    color: "#fff",
   },
 
-  sheetOverlay: {
+  overlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "flex-end",
-  },
-
-  sheet: {
-    backgroundColor: "#fff",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-
-  sheetItem: {
-    paddingVertical: 16,
+    justifyContent: "center",
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
   },
 
-  sheetText: {
+  popup: {
+    backgroundColor: "#fff",
+    width: "80%",
+    borderRadius: 16,
+    padding: 20,
+  },
+
+  popupTitle: {
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: "800",
+    marginBottom: 14,
   },
 
-  cancelItem: {
-    borderBottomWidth: 0,
+  popupText: {
+    fontSize: 15,
+    marginVertical: 10,
+  },
+
+  deleteText: {
+    fontSize: 15,
+    color: "#FF3B30",
+    marginBottom: 10,
   },
 
   cancelText: {
-    fontSize: 16,
-    fontWeight: "800",
+    fontSize: 15,
     color: colors.primary,
+    fontWeight: "700",
+    marginTop: 10,
   },
 
-  modalOverlay: {
+  overlayBottom: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.4)",
     justifyContent: "flex-end",
   },
 
-  modalCard: {
+  calendarCard: {
     backgroundColor: "#fff",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 16,
-  },
-
-  modalTitle: {
-    fontSize: 16,
-    fontWeight: "800",
-    marginBottom: 10,
-  },
-
-  clearBtn: {
-    marginTop: 10,
-    padding: 12,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: colors.primary,
-    alignItems: "center",
-  },
-
-  clearText: {
-    color: colors.primary,
-    fontWeight: "700",
   },
 });

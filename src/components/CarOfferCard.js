@@ -25,7 +25,7 @@ const CarOfferCard = ({ badge, price, service, validity, benefits }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.85}
-      onPress={handlePress}
+      // onPress={handlePress}
       style={styles.card}
     >
       {/* Badge */}
