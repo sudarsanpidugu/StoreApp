@@ -19,9 +19,9 @@ import colors from "../../constants/colors";
 
 /* ---------------- STATUS COLORS ---------------- */
 const STATUS_COLORS = {
-  Accept: colors.primary,
+  Create: "#F59E0B",
+  "In Progress": colors.primary,
   Completed: "#2E7D32",
-  Cancel: "#FF3B30",
 };
 
 /* ---------------- BOOKINGS DATA ---------------- */
@@ -44,7 +44,7 @@ const INITIAL_BOOKINGS = [
     date: "2025-01-20",
     displayDate: "20 Jan 2025",
     time: "10:00 AM",
-    status: "Accept",
+    status: "In Progress",
     distance: "3.4 km",
     image: require("../../../assets/Image/provider/p3.jpg"),
   },
@@ -55,7 +55,7 @@ const INITIAL_BOOKINGS = [
     date: "2025-01-05",
     displayDate: "05 Jan 2025",
     time: "02:15 PM",
-    status: "Cancel",
+    status: "Create",
     distance: "2.1 km",
     image: require("../../../assets/Image/provider/p2.jpg"),
   },
@@ -65,7 +65,7 @@ const BookingHistory = () => {
   const navigation = useNavigation();
 
   const [bookings, setBookings] = useState(INITIAL_BOOKINGS);
-  const [activeTab, setActiveTab] = useState("Accept");
+  const [activeTab, setActiveTab] = useState("Create");
   const [selectedDate, setSelectedDate] = useState(null);
   const [filterSheetVisible, setFilterSheetVisible] = useState(false);
   const [calendarVisible, setCalendarVisible] = useState(false);
@@ -88,14 +88,13 @@ const BookingHistory = () => {
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
 
-      {/* HEADER GRADIENT */}
+      {/* HEADER */}
       <LinearGradient
         colors={[colors.primary, "#4ca3ff"]}
         style={styles.headerGradient}
       />
 
       <SafeAreaView style={{ flex: 1 }}>
-        {/* HEADER */}
         <View style={styles.headerArea}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
@@ -108,38 +107,26 @@ const BookingHistory = () => {
           </TouchableOpacity>
         </View>
 
-        {/* STATUS TABS */}
+        {/* ---------------- STATUS TABS ---------------- */}
         <View style={styles.tabsContainer}>
-          {["Accept", "Completed", "Cancel"].map((tab) => {
+          {["Create", "In Progress", "Completed"].map((tab) => {
             const isActive = activeTab === tab;
             const tabColor = STATUS_COLORS[tab];
 
             return (
               <TouchableOpacity
                 key={tab}
-                style={[
-                  styles.tab,
-                  isActive && { backgroundColor: tabColor },
-                ]}
+                style={[styles.tab, isActive && { backgroundColor: tabColor }]}
                 onPress={() => setActiveTab(tab)}
-                activeOpacity={0.85}
               >
-                <Text
-                  style={[
-                    styles.tabText,
-                    isActive && styles.activeTabText,
-                  ]}
-                >
+                <Text style={[styles.tabText, isActive && styles.activeTabText]}>
                   {tab}
                 </Text>
-
-                {/* UNDERLINE INDICATOR */}
                 {isActive && <View style={styles.tabIndicator} />}
               </TouchableOpacity>
             );
           })}
         </View>
-
 
         {/* ---------------- CONTENT ---------------- */}
         {filteredBookings.length === 0 ? (
@@ -165,13 +152,23 @@ const BookingHistory = () => {
                   </View>
 
                   <View style={styles.row}>
-                    <Entypo name="location-pin" size={16} color={STATUS_COLORS[item.status]} />
-                    <Text style={[styles.distance, { color: STATUS_COLORS[item.status] }]}>
+                    <Entypo
+                      name="location-pin"
+                      size={16}
+                      color={STATUS_COLORS[item.status]}
+                    />
+                    <Text
+                      style={[
+                        styles.distance,
+                        { color: STATUS_COLORS[item.status] },
+                      ]}
+                    >
                       {item.distance}
                     </Text>
                   </View>
                 </View>
 
+                {/* STATUS BADGE */}
                 <View
                   style={[
                     styles.statusBox,
@@ -186,28 +183,30 @@ const BookingHistory = () => {
         )}
       </SafeAreaView>
 
-      {/* ---------------- FILTER ACTION SHEET ---------------- */}
-      <Modal transparent animationType="slide" visible={filterSheetVisible}>
-        <View style={styles.sheetOverlay}>
-          <View style={styles.sheet}>
-            <TouchableOpacity style={styles.sheetItem} onPress={deleteAllBookings}>
-              <Text style={[styles.sheetText, { color: "#FF3B30" }]}>
+      {/* ---------------- FILTER POPUP ---------------- */}
+      <Modal transparent animationType="fade" visible={filterSheetVisible}>
+        <View style={styles.centerOverlay}>
+          <View style={styles.filterPopup}>
+            <Text style={styles.popupTitle}>Filter Options</Text>
+
+            <TouchableOpacity style={styles.popupItem} onPress={deleteAllBookings}>
+              <Text style={[styles.popupText, { color: "#FF3B30" }]}>
                 Delete All
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={styles.sheetItem}
+              style={styles.popupItem}
               onPress={() => {
                 setFilterSheetVisible(false);
                 setCalendarVisible(true);
               }}
             >
-              <Text style={styles.sheetText}>Filter by Date</Text>
+              <Text style={styles.popupText}>Filter by Date</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.sheetItem, styles.cancelItem]}
+              style={styles.popupItem}
               onPress={() => setFilterSheetVisible(false)}
             >
               <Text style={styles.cancelText}>Cancel</Text>
@@ -216,7 +215,7 @@ const BookingHistory = () => {
         </View>
       </Modal>
 
-      {/* ---------------- DATE FILTER MODAL ---------------- */}
+      {/* ---------------- DATE FILTER ---------------- */}
       <Modal transparent animationType="slide" visible={calendarVisible}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalCard}>
@@ -227,27 +226,7 @@ const BookingHistory = () => {
                 setSelectedDate(day.dateString);
                 setCalendarVisible(false);
               }}
-              markedDates={
-                selectedDate
-                  ? {
-                    [selectedDate]: {
-                      selected: true,
-                      selectedColor: colors.primary,
-                    },
-                  }
-                  : {}
-              }
             />
-
-            <TouchableOpacity
-              style={styles.clearBtn}
-              onPress={() => {
-                setSelectedDate(null);
-                setCalendarVisible(false);
-              }}
-            >
-              <Text style={styles.clearText}>Clear Filter</Text>
-            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -256,6 +235,7 @@ const BookingHistory = () => {
 };
 
 export default BookingHistory;
+
 
 /* ---------------- STYLES ---------------- */
 const styles = StyleSheet.create({

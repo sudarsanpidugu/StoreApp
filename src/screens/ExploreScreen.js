@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -6,180 +6,88 @@ import {
   TouchableOpacity,
   TextInput,
   StatusBar,
-  FlatList,
-  ActivityIndicator,
 } from "react-native";
-import MapView from "react-native-maps";
-import * as Location from "expo-location";
+import { WebView } from "react-native-webview";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { LocationContext } from "../constants/LocationContext";
 import colors from "../constants/colors";
 
-
-const lightMapStyle = [
-  { elementType: "geometry", stylers: [{ color: "#f5f5f5" }] },
-  { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-  { elementType: "labels.text.fill", stylers: [{ color: "#616161" }] },
-  { elementType: "labels.text.stroke", stylers: [{ color: "#f5f5f5" }] },
-  {
-    featureType: "road",
-    elementType: "geometry",
-    stylers: [{ color: "#ffffff" }],
-  },
-  {
-    featureType: "road.highway",
-    elementType: "geometry",
-    stylers: [{ color: "#e5e5e5" }],
-  },
-  {
-    featureType: "water",
-    elementType: "geometry",
-    stylers: [{ color: "#ffffff" }],
-  },
-];
+/* GOOGLE MAP IFRAME (YOUR PROVIDED URL) */
+const MAP_HTML = `
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.4517443869618!2d78.38498667383035!3d17.438079401345412!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb9186323a93cb%3A0xc7a40dc7dd7942d8!2sCafell%20Technologies%20Pvt%20Ltd!5e0!3m2!1sen!2sin!4v1766149692747!5m2!1sen!2sin"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      allowfullscreen>
+    </iframe>
+  </body>
+</html>
+`;
 
 const ExploreScreen = () => {
   const navigation = useNavigation();
   const { setLocation } = useContext(LocationContext);
-  const mapRef = useRef(null);
-
-  const [region, setRegion] = useState(null);
-  const [address, setAddress] = useState("Fetching location...");
-  const [search, setSearch] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-
-  const getCurrentLocation = async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") return;
-
-    const loc = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.BestForNavigation,
-    });
-
-    const reg = {
-      latitude: loc.coords.latitude,
-      longitude: loc.coords.longitude,
-      latitudeDelta: 0.005,
-      longitudeDelta: 0.005,
-    };
-
-    setRegion(reg);
-    mapRef.current?.animateToRegion(reg, 900);
-    reverseGeocode(reg.latitude, reg.longitude);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getCurrentLocation();
-  }, []);
-
-
-  const reverseGeocode = async (lat, lng) => {
-    const res = await Location.reverseGeocodeAsync({ latitude: lat, longitude: lng });
-    if (res.length > 0) {
-      const p = res[0];
-      setAddress(
-        `${p.name || ""} ${p.street || ""}, ${p.city || p.region || ""}`.trim()
-      );
-    }
-  };
-
-  /* 🔍 SEARCH WITH SUGGESTIONS */
-  const onSearchChange = async (text) => {
-    setSearch(text);
-    if (text.length < 3) return setSuggestions([]);
-
-    const res = await Location.geocodeAsync(text);
-    setSuggestions(res.slice(0, 6));
-  };
-
-  if (loading || !region) {
-    return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
-  }
 
   return (
     <View style={{ flex: 1 }}>
       <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
 
+      {/* MAP BACKGROUND */}
+      <WebView
+        source={{ html: MAP_HTML }}
+        style={{ flex: 1 }}
+        javaScriptEnabled
+        domStorageEnabled
+      />
+
+      {/* SEARCH BAR */}
       <View style={styles.searchBar}>
         <Ionicons name="search" size={18} color="#6B7280" />
         <TextInput
           placeholder="Search area, street, landmark"
-          value={search}
-          onChangeText={onSearchChange}
           style={styles.searchInput}
+          placeholderTextColor="#6B7280"
         />
       </View>
 
-      {suggestions.length > 0 && (
-        <View style={styles.suggestionBox}>
-          <FlatList
-            data={suggestions}
-            keyExtractor={(_, i) => i.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.suggestionItem}
-                onPress={() => {
-                  const reg = {
-                    latitude: item.latitude,
-                    longitude: item.longitude,
-                    latitudeDelta: 0.01,
-                    longitudeDelta: 0.01,
-                  };
-                  setRegion(reg);
-                  mapRef.current?.animateToRegion(reg, 800);
-                  reverseGeocode(reg.latitude, reg.longitude);
-                  setSearch("");
-                  setSuggestions([]);
-                }}
-              >
-                <Ionicons name="location-outline" size={18} color={colors.primary} />
-                <Text style={styles.suggestionText}>{search}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-      )}
-
-      <MapView
-        ref={mapRef}
-        style={{ flex: 1 }}
-        region={region}
-        customMapStyle={lightMapStyle}
-        onRegionChangeComplete={(r) => {
-          setRegion(r);
-          reverseGeocode(r.latitude, r.longitude);
-        }}
-      />
-
-      <TouchableOpacity style={styles.gpsBtn} onPress={getCurrentLocation}>
-        <Ionicons name="locate" size={22} color="#fff" />
-      </TouchableOpacity>
-
+      {/* CENTER PIN */}
       <View style={styles.centerPin}>
         <Ionicons name="location-sharp" size={44} color={colors.primary} />
       </View>
 
+      {/* BOTTOM CONFIRM */}
       <View style={styles.bottomSheet}>
         <Text style={styles.sheetLabel}>Delivering to</Text>
-        <Text style={styles.sheetAddress} numberOfLines={2}>
-          {address}
+        <Text style={styles.sheetAddress}>
+          Cafell Technologies Pvt Ltd, Hyderabad
         </Text>
 
         <TouchableOpacity
           style={styles.confirmBtn}
           onPress={() => {
             setLocation({
-              title: address,
-              latitude: region.latitude,
-              longitude: region.longitude,
+              title: "Cafell Technologies Pvt Ltd, Hyderabad",
+              latitude: 17.4380794,
+              longitude: 78.3849866,
             });
             navigation.goBack();
           }}
@@ -193,20 +101,15 @@ const ExploreScreen = () => {
 
 export default ExploreScreen;
 
+/* ---------------- STYLES ---------------- */
 const styles = StyleSheet.create({
-  loader: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
   /* SEARCH */
   searchBar: {
     position: "absolute",
     top: 50,
     left: 16,
     right: 16,
-    zIndex: 20,
+    zIndex: 10,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#fff",
@@ -220,50 +123,17 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10,
     fontSize: 14,
-  },
-
-  suggestionBox: {
-    position: "absolute",
-    top: 108,
-    left: 16,
-    right: 16,
-    backgroundColor: "#fff",
-    borderRadius: 14,
-    elevation: 5,
-    zIndex: 20,
-  },
-
-  suggestionItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 14,
-    borderBottomWidth: 0.5,
-    borderColor: "#eee",
-  },
-
-  suggestionText: {
-    marginLeft: 10,
-    fontSize: 14,
     color: "#111827",
   },
 
-  /* MAP CONTROLS */
-  gpsBtn: {
-    position: "absolute",
-    right: 16,
-    bottom: 180,
-    backgroundColor: colors.primary,
-    padding: 14,
-    borderRadius: 30,
-    elevation: 6,
-  },
-
+  /* CENTER PIN */
   centerPin: {
     position: "absolute",
     top: "50%",
     left: "50%",
     marginLeft: -22,
     marginTop: -44,
+    zIndex: 10,
   },
 
   /* BOTTOM SHEET */
@@ -305,5 +175,3 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
-
-
